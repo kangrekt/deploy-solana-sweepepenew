@@ -266,11 +266,12 @@ img, iframe, video, canvas, svg {
     border: 1px solid var(--border-color);
     padding: 10px 15px;
     border-radius: 8px;
-    max-width: 500px;
+    max-width: 100%;
+    width: 500px;
 }
 .ca-info { display: flex; flex-direction: column; }
 .ca-label { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 2px; }
-#ca-text { font-family: monospace; font-size: 0.9rem; color: var(--text-main); }
+#ca-text { font-family: monospace; font-size: 0.9rem; color: var(--text-main); word-break: break-all; overflow-wrap: break-word; }
 .copy-btn {
     background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); transition: 0.3s;
 }
@@ -449,7 +450,7 @@ img, iframe, video, canvas, svg {
 .ca-container-small {
     padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; margin-top: auto;
 }
-.ca-text-small { font-family: monospace; font-size: 0.7rem; color: var(--text-muted); }
+.ca-text-small { font-family: monospace; font-size: 0.7rem; color: var(--text-muted); word-break: break-all; overflow-wrap: break-word; display: block; max-width: 100%; }
 .copy-btn-small { background: transparent; border: none; cursor: pointer; color: var(--text-muted); }
 .copy-btn-small:hover { color: var(--neon-cyan); }
 
