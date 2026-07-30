@@ -269,9 +269,9 @@ img, iframe, video, canvas, svg {
     max-width: 100%;
     width: 500px;
 }
-.ca-info { display: flex; flex-direction: column; }
+.ca-info { display: flex; flex-direction: column; min-width: 0; width: 100%; }
 .ca-label { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 2px; }
-#ca-text { font-family: monospace; font-size: 0.9rem; color: var(--text-main); word-break: break-all; overflow-wrap: break-word; }
+#ca-text { font-family: monospace; font-size: clamp(0.7rem, 2.5vw, 0.9rem); color: var(--text-main); word-break: break-all; overflow-wrap: break-word; display: inline-block; max-width: 100%; }
 .copy-btn {
     background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); transition: 0.3s;
 }
@@ -448,9 +448,9 @@ img, iframe, video, canvas, svg {
 .arrow { color: var(--text-muted); }
 
 .ca-container-small {
-    padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; margin-top: auto;
+    padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; margin-top: auto; min-width: 0;
 }
-.ca-text-small { font-family: monospace; font-size: 0.7rem; color: var(--text-muted); word-break: break-all; overflow-wrap: break-word; display: block; max-width: 100%; }
+.ca-text-small { font-family: monospace; font-size: clamp(0.6rem, 2vw, 0.7rem); color: var(--text-muted); word-break: break-all; overflow-wrap: break-word; display: inline-block; max-width: 100%; min-width: 0; }
 .copy-btn-small { background: transparent; border: none; cursor: pointer; color: var(--text-muted); }
 .copy-btn-small:hover { color: var(--neon-cyan); }
 
@@ -505,7 +505,8 @@ img, iframe, video, canvas, svg {
     .floating-mascot { font-size: clamp(6rem, 20vw, 10rem); }
     .floating-badge { top: 10px; right: 0px; padding: 10px; font-size: 0.8rem; }
     
-    .ca-container { justify-content: center; flex-direction: column; gap: 10px; text-align: center; }
+    .ca-container { justify-content: center; flex-direction: column; gap: 10px; text-align: center; width: 100%; box-sizing: border-box; }
+    .ca-info { align-items: center; }
     .hero-buttons { justify-content: center; flex-wrap: wrap; }
     .btn { padding: 12px 24px; font-size: clamp(0.8rem, 2.5vw, 1rem); width: 100%; max-width: 250px; }
     
