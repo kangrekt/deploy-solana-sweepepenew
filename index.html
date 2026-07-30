@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$SWEEP - Stop Wasting Everything</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Effects (From WEB1) -->
+    <div class="cyber-grid"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-circle">🐸</div>
+            <div class="logo-text">
+                <span class="ticker dynamic-symbol">$SWEEP</span>
+                <span class="tagline">STOP WASTING EVERYTHING<br>EXCEPT PEPE</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#home" class="active">HOME</a>
+            <a href="#about">ABOUT</a>
+            <a href="#lore">LORE</a>
+            <a href="#tokenomics">TOKENOMICS</a>
+            <a href="#roadmap">ROADMAP</a>
+            <a href="#buy">BUY</a>
+            <a href="#chart">CHART</a>
+            <a href="#memehub">MEME HUB</a>
+            <a href="#team">TEAM</a>
+            <a href="#news">NEWS</a>
+            <a href="#faq">FAQ</a>
+        </div>
+        <a href="#" class="btn btn-outline btn-nav">BUY <span class="dynamic-symbol">$SWEEP</span></a>
+    </nav>
+
+    <!-- Ticker Bar -->
+    <div class="ticker-bar">
+        <div class="ticker-wrap">
+            <div class="ticker-move">
+                <span><span class="dynamic-symbol">$SWEEP</span> Price <span class="neon-text" id="sync-ticker-price">$0.0000000</span> <span class="up" id="sync-ticker-change">▲ 0.00%</span></span>
+                <span class="separator">|</span>
+                <span>Market Cap <span class="neon-text" id="sync-ticker-mcap">$0</span></span>
+                <span class="separator">|</span>
+                <span>Volume 5M <span class="neon-text" id="sync-ticker-vol-m5">$0</span></span>
+                <span class="separator">|</span>
+                <span>Volume 1H <span class="neon-text" id="sync-ticker-vol-h1">$0</span></span>
+                <span class="separator">|</span>
+                <span>Volume 6H <span class="neon-text" id="sync-ticker-vol-h6">$0</span></span>
+                <span class="separator">|</span>
+                <span>Volume 24H <span class="neon-text" id="sync-ticker-vol-h24">$0</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="container">
+        
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="title">STOP WASTING<br>EVERYTHING<br><span class="neon-text">EXCEPT PEPE</span></h1>
+                <p class="subtitle">Pepe is tired of seeing junk tokens everywhere.<br>He took his broom and started cleaning the blockchain.<br>$SWEEP is here to clean up the mess.</p>
+                
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">BUY <span class="dynamic-symbol">$SWEEP</span> 🚀</a>
+                    <a href="#" class="btn btn-secondary">👥 JOIN COMMUNITY</a>
+                </div>
+
+                <div class="ca-container">
+                    <div class="ca-info">
+                        <span class="ca-label">CONTRACT ADDRESS (SOLANA)</span>
+                        <span id="ca-text">Agmu8Xgn7rU4zFv4DMPrEBhYDdPsmiEG5hCiYyvSpump</span>
+                    </div>
+                    <button id="copy-btn" class="copy-btn">📋</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-placeholder-box">
+                    <div class="floating-mascot">🐸🧹</div>
+                </div>
+                <div class="floating-badge">CLEAN BLOCKCHAIN<br>BETTER FUTURE</div>
+            </div>
+        </section>
+
+        <!-- Stats Bar -->
+        <section class="stats-bar">
+            <div class="stat-box">
+                <span class="stat-icon">📈</span>
+                <div class="stat-data">
+                    <span class="stat-title">PRICE</span>
+                    <span class="stat-value"><span id="sync-stat-price">$0.0000000</span> <span class="up" id="sync-stat-change">▲ 0.00%</span></span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-icon">💰</span>
+                <div class="stat-data">
+                    <span class="stat-title">MARKET CAP</span>
+                    <span class="stat-value" id="sync-stat-mcap">$0</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-icon">👥</span>
+                <div class="stat-data">
+                    <span class="stat-title">HOLDERS</span>
+                    <span class="stat-value">25,678</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-icon">📊</span>
+                <div class="stat-data">
+                    <span class="stat-title">TOTAL SUPPLY</span>
+                    <span class="stat-value">1,000,000,000,000</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-icon">🌊</span>
+                <div class="stat-data">
+                    <span class="stat-title">VOLUME 24H</span>
+                    <span class="stat-value" id="sync-stat-vol-h24">$0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 Column Dashboard Grid -->
+        <div class="dashboard-grid">
+            
+            <!-- ROW 1: TOP CARDS -->
+            <!-- Tokenomics Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>TOKENOMICS</h2>
+                </div>
+                <div class="card-body row-flex">
+                    <div class="donut-chart-placeholder">
+                        <div class="donut-inner">
+                            <span class="donut-title">TOTAL SUPPLY</span>
+                            <span class="donut-value">1,000,000,000,000</span>
+                            <span class="donut-ticker">$SWEEP</span>
+                        </div>
+                    </div>
+                    <ul class="tokenomics-list">
+                        <li><span class="dot dot-liq"></span> Liquidity <span class="percent">40%</span></li>
+                        <li><span class="dot dot-mkt"></span> Marketing <span class="percent">20%</span></li>
+                        <li><span class="dot dot-com"></span> Community <span class="percent">20%</span></li>
+                        <li><span class="dot dot-brn"></span> Burn <span class="percent">10%</span></li>
+                        <li><span class="dot dot-tm"></span> Team <span class="percent">10%</span></li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline btn-full">VIEW DETAILS</button>
+                </div>
+            </div>
+
+            <!-- Live Chart Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>LIVE CHART</h2>
+                </div>
+                <div class="card-body">
+                    <div class="chart-header">
+                        <div class="chart-pair">🐸 <span class="dynamic-symbol">$SWEEP</span> / SOL</div>
+                        <div class="chart-price"><span id="sync-chart-price">$0.0000000</span> <span class="neon-text" id="sync-chart-change">▲ 0.00%</span></div>
+                    </div>
+                    <div class="chart-placeholder" style="padding:0; overflow:hidden;">
+                        <iframe src="https://dexscreener.com/solana/Agmu8Xgn7rU4zFv4DMPrEBhYDdPsmiEG5hCiYyvSpump?embed=1&theme=dark&trades=0&info=0" style="width:100%; height:400px; border:none;"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction Card -->
+            <div class="card">
+                <div class="card-header border-bottom">
+                    <div class="buy-header">
+                        <h2>TRANSACTION</h2>
+                    </div>
+                </div>
+                <div class="card-body no-pad">
+                    <div class="dex-list" id="tx-list" style="max-height: 400px; overflow-y: auto;">
+                        <div style="padding: 15px; text-align: center; color: #aaa;">Waiting for live Pump.fun trades...</div>
+                    </div>
+                    <div class="ca-container-small">
+                        <div class="ca-info">
+                            <span class="ca-label">CONTRACT (SOLANA)</span>
+                            <span class="ca-text-small">SWEEPxxx...xxxSOL</span>
+                        </div>
+                        <button class="copy-btn-small">📋</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROW 2: BOTTOM CARDS -->
+            <!-- Roadmap Card -->
+            <div class="card">
+                <div class="card-header border-bottom">
+                    <h2>ROADMAP</h2>
+                </div>
+                <div class="card-body roadmap-body">
+                    <div class="roadmap-item active">
+                        <div class="rd-icon">✓</div>
+                        <div class="rd-content">
+                            <span class="rd-phase">PHASE 1</span>
+                            <span class="rd-desc">Launch & Community Build</span>
+                        </div>
+                    </div>
+                    <div class="roadmap-item current">
+                        <div class="rd-icon"></div>
+                        <div class="rd-content">
+                            <span class="rd-phase">PHASE 2</span>
+                            <span class="rd-desc">Listings & Marketing Expansion</span>
+                        </div>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="rd-icon"></div>
+                        <div class="rd-content">
+                            <span class="rd-phase">PHASE 3</span>
+                            <span class="rd-desc">CEX Listings & Partnerships</span>
+                        </div>
+                    </div>
+                    <div class="roadmap-item">
+                        <div class="rd-icon"></div>
+                        <div class="rd-content">
+                            <span class="rd-phase">PHASE 4</span>
+                            <span class="rd-desc">Mass Adoption & Utility</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline btn-full">VIEW FULL ROADMAP</button>
+                </div>
+            </div>
+
+            <!-- Meme Hub Card -->
+            <div class="card">
+                <div class="card-header border-bottom">
+                    <h2>MEME HUB</h2>
+                </div>
+                <div class="card-body">
+                    <div class="meme-grid">
+                        <div class="meme-item">CLEAN UP<br>THE SCAM</div>
+                        <div class="meme-item">$SWEEP<br>TO THE MOON</div>
+                        <div class="meme-item">THIS IS<br>A CLEAN CHART</div>
+                        <div class="meme-item">NO MORE<br>RUG PULLS</div>
+                        <div class="meme-item">GOODBYE<br>TRASH COINS</div>
+                        <div class="meme-item">JUST<br>$SWEEP IT</div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline btn-full">VIEW MORE MEMES</button>
+                </div>
+            </div>
+
+            <!-- Latest News Card -->
+            <div class="card">
+                <div class="card-header border-bottom">
+                    <h2>LATEST NEWS</h2>
+                </div>
+                <div class="card-body">
+                    <div class="news-list">
+                        <div class="news-item">
+                            <div class="news-img">📰</div>
+                            <div class="news-info">
+                                <h4>$SWEEP Listed on Jupiter Exchange</h4>
+                                <span class="news-date">May 20, 2024</span>
+                            </div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-img">🤝</div>
+                            <div class="news-info">
+                                <h4>Partnership with Major Web3 Community</h4>
+                                <span class="news-date">May 18, 2024</span>
+                            </div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-img">🔥</div>
+                            <div class="news-info">
+                                <h4>$SWEEP Burns 100M Tokens!</h4>
+                                <span class="news-date">May 15, 2024</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-outline btn-full">VIEW ALL NEWS</button>
+                </div>
+            </div>
+
+        </div> <!-- End Dashboard Grid -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid container">
+            <div class="footer-col about-col">
+                <h3>ABOUT <span class="neon-text">$SWEEP</span></h3>
+                <p>$SWEEP is a meme token on Base chain with a mission to clean up the blockchain from scam and useless tokens. We build a strong community, have fun, and make crypto great again!</p>
+                <div class="footer-logo-small">🐸</div>
+            </div>
+            <div class="footer-col links-col">
+                <h3>QUICK LINKS</h3>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Tokenomics</a></li>
+                    <li><a href="#">Roadmap</a></li>
+                    <li><a href="#">Buy $SWEEP</a></li>
+                    <li><a href="#">Chart</a></li>
+                    <li><a href="#">Meme Hub</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-col comm-col">
+                <h3>COMMUNITY</h3>
+                <ul>
+                    <li><a href="#">𝕏 Twitter (X)</a></li>
+                    <li><a href="#">✈ Telegram</a></li>
+                    <li><a href="#">👾 Discord</a></li>
+                    <li><a href="#">▶ YouTube</a></li>
+                </ul>
+            </div>
+            <div class="footer-col contract-col">
+                <div class="ca-container-footer">
+                    <span class="ca-label">CONTRACT ADDRESS (SOLANA)</span>
+                    <div class="ca-box">
+                        <span class="ca-text-small">SWEEPxxx...xxxSOL</span>
+                        <button class="copy-btn-small">📋</button>
+                    </div>
+                </div>
+                <div class="audit-info">
+                    <span class="ca-label">AUDIT</span>
+                    <span class="white">Coming Soon</span>
+                </div>
+                <div class="network-info">
+                    <span class="ca-label">NETWORK</span>
+                    <span class="network-badge">🟣 SOLANA</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <span>© 2024 $SWEEP. All rights reserved.</span>
+            <span>Built with 🧹 by the janitors</span>
+            <span>Not financial advice. DYOR.</span>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
