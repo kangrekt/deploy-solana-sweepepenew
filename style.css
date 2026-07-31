@@ -1027,10 +1027,12 @@ svg {
     }
 
     .floating-badge {
-        top: 10px;
-        right: 0px;
+        top: -10px;
+        left: 50%;
+        right: auto;
         padding: 10px;
         font-size: 0.8rem;
+        transform: translateX(-50%) rotate(5deg);
     }
 
     .ca-container {
