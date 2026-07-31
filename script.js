@@ -422,8 +422,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     const memeGridRect = memeContainer.getBoundingClientRect();
                     const holdersListRect = holdersList.getBoundingClientRect();
 
-                    // Pixel-perfect calculation: Bottom of meme grid - Top of holders list
-                    const targetHeight = memeGridRect.bottom - holdersListRect.top;
+                    // Calculate current JS scale factor applied to the body
+                    const scale = window.innerWidth / 1920;
+
+                    // Pixel-perfect calculation: Bottom of meme grid - Top of holders list, divided by scale
+                    const targetHeight = (memeGridRect.bottom - holdersListRect.top) / scale;
 
                     holdersList.style.maxHeight = Math.max(100, targetHeight) + 'px';
                 }
