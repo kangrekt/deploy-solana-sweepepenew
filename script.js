@@ -112,6 +112,67 @@ document.addEventListener('DOMContentLoaded', () => {
         solscanLink.href = `https://solscan.io/token/${TOKEN_CA}#holders`;
     }
 
+    // Real-time LP Locked Sync via RugCheck
+    async function syncLpLocked() {
+        if (isSoon) return;
+        try {
+            const res = await fetch(`https://api.rugcheck.xyz/v1/tokens/${TOKEN_CA}/report`);
+            const data = await res.json();
+            
+            const lpEl = document.getElementById('sync-lp-locked');
+            if (!lpEl || !data.markets || data.markets.length === 0) return;
+
+            // Calculate total LP locked percentage exactly like RugCheck Web UI
+            let totalLockedUSD = 0;
+            data.markets.forEach(m => {
+                if (m.lp && m.lp.lpLockedUSD) {
+                    totalLockedUSD += m.lp.lpLockedUSD;
+                }
+            });
+
+            const totalMarketLiquidity = data.totalMarketLiquidity || 0;
+            let pct = 0;
+
+            if (totalMarketLiquidity > 0) {
+                pct = (totalLockedUSD / totalMarketLiquidity) * 100;
+            } else {
+                // Fallback if totalMarketLiquidity is 0
+                let biggestPool = data.markets.sort((a,b) => (b.lp?.quoteUSD || 0) - (a.lp?.quoteUSD || 0))[0];
+                if (biggestPool && biggestPool.lp && typeof biggestPool.lp.lpLockedPct === 'number') {
+                    pct = biggestPool.lp.lpLockedPct;
+                }
+            }
+
+            if (pct >= 99.9) {
+                lpEl.innerText = '100% LOCKED';
+                lpEl.style.color = 'var(--up-green)';
+            } else if (pct > 0) {
+                lpEl.innerText = `${pct.toFixed(2)}%`;
+                if (pct < 50) {
+                    lpEl.style.color = 'var(--down-red)';
+                } else {
+                    lpEl.style.color = 'var(--neon-cyan)';
+                }
+            } else {
+                lpEl.innerText = 'UNLOCKED / CLMM';
+                lpEl.style.color = 'var(--down-red)';
+            }
+            // Sync Creator Address
+            const creatorEl = document.getElementById('sync-creator');
+            if (creatorEl && data.creator) {
+                const c = data.creator;
+                const shortC = c.substring(0, 4) + '...' + c.substring(c.length - 4);
+                // Create a clickable link to Solscan
+                creatorEl.innerHTML = `<a href="https://solscan.io/account/${c}" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px dashed rgba(255,255,255,0.5);">${shortC}</a>`;
+                creatorEl.style.color = '#fff';
+            }
+            
+        } catch (e) {
+            console.error('LP sync error:', e);
+        }
+    }
+    syncLpLocked();
+
     // Update any Buy links to Pump.fun dynamically
     document.querySelectorAll('a').forEach(link => {
         if (link.innerText.includes('BUY') && link.getAttribute('href') === '#') {
