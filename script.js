@@ -211,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+
     let latestTickerData = null;
     let isFirstFetch = true;
 
