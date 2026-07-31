@@ -21,11 +21,12 @@
 }
 
 body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-main);
-    font-family: 'Inter', sans-serif;
-    overflow-x: auto;
-    min-width: 1920px; /* Lock to 1920x1080 */
+    width: 1920px; /* Base structural width */
+    overflow-x: hidden;
     min-height: 100vh;
     line-height: 1.6;
 }
