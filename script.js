@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Auto-Scale Layout to fit any screen like an image ---
+    function autoScaleLayout() {
+        const targetWidth = 1920;
+        const currentWidth = window.innerWidth;
+        const scale = currentWidth / targetWidth;
+        
+        // Use CSS zoom for WebKit/Blink (Chrome, Edge, Safari, Opera)
+        document.body.style.zoom = scale;
+        
+        // Fallback for Firefox
+        if (navigator.userAgent.toLowerCase().includes('firefox')) {
+            document.body.style.transform = `scale(${scale})`;
+            document.body.style.transformOrigin = 'top left';
+            // Adjust height to prevent empty space below
+            document.documentElement.style.height = (document.body.scrollHeight * scale) + 'px';
+        }
+    }
+    window.addEventListener('resize', autoScaleLayout);
+    autoScaleLayout(); // Run immediately
+
     // Copy CA to Clipboard (Hero Section)
     const copyBtn = document.getElementById('copy-btn');
     const caText = document.getElementById('ca-text');
