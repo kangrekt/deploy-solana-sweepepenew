@@ -193,6 +193,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Update Pump.fun links dynamically on click
+    document.querySelectorAll('.pump-fun-link').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentCA = document.getElementById('ca-text') ? document.getElementById('ca-text').innerText.trim() : TOKEN_CA;
+            window.open(`https://pump.fun/coin/${currentCA}`, '_blank');
+        });
+    });
+
+    // Update RugCheck links dynamically on click
+    document.querySelectorAll('.rugcheck-link').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentCA = document.getElementById('ca-text') ? document.getElementById('ca-text').innerText.trim() : TOKEN_CA;
+            window.open(`https://rugcheck.xyz/tokens/${currentCA}`, '_blank');
+        });
+    });
+
     let latestTickerData = null;
     let isFirstFetch = true;
 
