@@ -54,11 +54,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Real-time DexScreener Sync
     const caElement = document.getElementById('ca-text');
     const TOKEN_CA = caElement ? caElement.innerText.trim() : '';
+    const isSoon = !TOKEN_CA || TOKEN_CA.toUpperCase() === 'SOON';
+
     const DEX_API_URL = `https://api.dexscreener.com/latest/dex/tokens/${TOKEN_CA}`;
 
     // Update iframe chart dynamically
     const chartIframe = document.querySelector('.chart-placeholder iframe');
-    if (chartIframe) {
+    if (isSoon) {
+        const chartPlaceholder = document.querySelector('.chart-placeholder');
+        if (chartPlaceholder) {
+            chartPlaceholder.innerHTML = '<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size: 4rem; font-weight: 900; color: var(--neon-cyan); letter-spacing: 5px; text-shadow: 0 0 20px var(--neon-cyan); font-family: \'Orbitron\', sans-serif;">SOON</div>';
+        }
+        document.querySelectorAll('.dynamic-symbol').forEach(el => {
+            el.innerText = '$SWEEP';
+        });
+        document.title = "$SWEEP - Stop Wasting Everything";
+    } else if (chartIframe) {
         chartIframe.src = `https://dexscreener.com/solana/${TOKEN_CA}?embed=1&theme=dark&trades=0&info=0`;
     }
 
@@ -80,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isFirstFetch = true;
 
     async function fetchDexData() {
+        if (isSoon) return;
         try {
             const response = await fetch(DEX_API_URL);
             const data = await response.json();
@@ -203,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch Top Holders from Rugcheck API
     async function fetchRugCheckHolders() {
+        if (isSoon) return;
         const holdersList = document.getElementById('holders-list');
         if (!holdersList) return;
 
@@ -304,9 +317,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="${meme.thumbnail || meme.url}" alt="${meme.title || 'Meme'}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
                 `;
 
-                // Optional: Open image in new tab if clicked
+                // Open image in modal if clicked
                 memeDiv.addEventListener('click', () => {
-                    window.open(meme.thumbnail || meme.url, '_blank');
+                    openVideoModal(meme.thumbnail || meme.url);
                 });
 
                 memeContainer.appendChild(memeDiv);
@@ -418,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function openVideoModal(url) {
         if (!videoModal) return;
         videoModalBody.innerHTML = `
-                        <video src="${url}" type="video/mp4" controls autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;"></video>
+                        <img src="${url}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
                     `; videoModal.style.display = 'flex';
     }
 
