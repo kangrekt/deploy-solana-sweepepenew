@@ -173,12 +173,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     syncLpLocked();
 
-    // Update any Buy links to Pump.fun dynamically
+    // Update any Buy links to Fluxbeam dynamically on click
     document.querySelectorAll('a').forEach(link => {
-        if (link.innerText.includes('BUY') && link.getAttribute('href') === '#') {
-            link.href = `https://pump.fun/${TOKEN_CA}`;
-            link.target = "_blank";
+        if (link.textContent.toUpperCase().includes('BUY') && link.getAttribute('href') === '#') {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const currentCA = document.getElementById('ca-text') ? document.getElementById('ca-text').innerText.trim() : TOKEN_CA;
+                window.open(`https://fluxbeam.xyz/${currentCA}?network=solana`, '_blank');
+            });
         }
+    });
+
+    // Update DexScreener link dynamically on click
+    document.querySelectorAll('.dexscreener-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentCA = document.getElementById('ca-text') ? document.getElementById('ca-text').innerText.trim() : TOKEN_CA;
+            window.open(`https://dexscreener.com/solana/${currentCA}`, '_blank');
+        });
     });
 
     let latestTickerData = null;
