@@ -53,30 +53,6 @@ svg {
 }
 
 /* Background Effects (From WEB1) */
-.cyber-grid {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-image:
-        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
-    z-index: -2;
-    transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
-    animation: gridMove 20s linear infinite;
-}
-
-@keyframes gridMove {
-    0% {
-        transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px);
-    }
-
-    100% {
-        transform: perspective(500px) rotateX(60deg) translateY(40px) translateZ(-200px);
-    }
-}
 
 .glow-orb {
     position: fixed;
@@ -84,6 +60,102 @@ svg {
     filter: blur(100px);
     z-index: -1;
     opacity: 0.4;
+}
+
+/* --- NIGHT SKY UNIVERSE --- */
+.star-universe {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: -3;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Tiny Background Stars */
+.star-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+}
+.layer-1 {
+    background-image: 
+      radial-gradient(1.5px 1.5px at 10% 15%, rgba(255,255,255,0.8), transparent),
+      radial-gradient(2px 2px at 25% 40%, rgba(255,255,255,1), transparent),
+      radial-gradient(1px 1px at 45% 5%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1.5px 1.5px at 60% 70%, rgba(255,255,255,0.9), transparent),
+      radial-gradient(2px 2px at 80% 25%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(1px 1px at 90% 85%, rgba(255,255,255,1), transparent),
+      radial-gradient(1.5px 1.5px at 30% 90%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(2px 2px at 75% 60%, rgba(255,255,255,0.8), transparent);
+    background-size: 250px 250px;
+    animation: twinkleStar 4s infinite alternate ease-in-out;
+}
+.layer-2 {
+    background-image: 
+      radial-gradient(2px 2px at 5% 50%, rgba(0,255,255,0.8), transparent),
+      radial-gradient(1.5px 1.5px at 35% 20%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 65% 80%, rgba(255,255,255,1), transparent),
+      radial-gradient(2.5px 2.5px at 85% 15%, rgba(255,255,255,0.9), transparent),
+      radial-gradient(1.5px 1.5px at 95% 65%, rgba(0,255,255,0.7), transparent);
+    background-size: 350px 350px;
+    animation: twinkleStar 6s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes twinkleStar {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* Shiny Multi-Pointed Stars (Segi-banyak) */
+.shiny-star {
+    position: absolute;
+    width: 35px; height: 35px;
+    background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 C50 40 60 50 100 50 C60 50 50 60 50 100 C50 60 40 50 0 50 C40 50 50 40 50 0 Z" fill="rgba(255, 255, 255, 0.9)" filter="drop-shadow(0 0 5px rgba(0,255,255,0.8))"/></svg>') center/contain no-repeat;
+    animation: shinyPulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes shinyPulse {
+    0% { transform: scale(0.6) rotate(0deg); opacity: 0.4; filter: brightness(0.8); }
+    100% { transform: scale(1.3) rotate(15deg); opacity: 1; filter: brightness(1.5); }
+}
+
+/* Meteor (Hujan Meteor) */
+.meteor {
+    position: absolute;
+    width: 2px;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, rgba(0, 255, 255, 1) 80%, rgba(255, 255, 255, 1) 100%);
+    border-radius: 50%;
+    transform: rotate(-45deg);
+    opacity: 0;
+    box-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+.m-1 {
+    top: -150px; left: 30%;
+    animation: meteorFall 10s infinite linear;
+    animation-delay: 2s;
+}
+.m-2 {
+    top: -150px; left: 70%;
+    animation: meteorFall 18s infinite linear;
+    animation-delay: 8s;
+}
+
+@keyframes meteorFall {
+    0% { transform: rotate(-45deg) translate(0, 0); opacity: 0; }
+    2% { opacity: 1; }
+    15% { transform: rotate(-45deg) translate(0, 1800px); opacity: 0; }
+    100% { transform: rotate(-45deg) translate(0, 1800px); opacity: 0; }
+}
+
+/* --- PARTICLES --- */
+#particles-js {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: -2;
+    pointer-events: none;
 }
 
 .orb-1 {
@@ -236,11 +308,9 @@ svg {
     justify-content: center;
 }
 
-.ticker {
-    font-size: 1.5rem;
+.dynamic-symbol {
     font-weight: 900;
     color: var(--neon-cyan);
-    line-height: 1;
 }
 
 .tagline {
@@ -649,35 +719,62 @@ svg {
 .roadmap-body {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 25px; /* Increased gap for better timeline feel */
+    position: relative;
+}
+
+/* Connecting Line */
+.roadmap-body::before {
+    content: '';
+    position: absolute;
+    top: 30px; /* Start slightly lower so it doesn't poke out top */
+    bottom: 30px; /* End slightly higher */
+    left: 31px; /* 20px padding + 12px half-icon - 1px half-line */
+    width: 2px;
+    background: rgba(255, 255, 255, 0.3); /* Made much brighter to be clearly visible */
+    z-index: 1;
 }
 
 .roadmap-item {
     display: flex;
     gap: 15px;
     align-items: flex-start;
+    position: relative;
+    z-index: 2; /* Sit above the line */
 }
 
 .rd-icon {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    border: 1px solid var(--text-muted);
+    border: 2px solid var(--text-muted);
+    background: var(--card-bg); /* Opaque background to hide line behind it */
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.7rem;
     color: #000;
+    flex-shrink: 0;
 }
 
 .roadmap-item.active .rd-icon {
     background: var(--neon-cyan);
     border-color: var(--neon-cyan);
+    color: #000; /* For the checkmark */
 }
 
 .roadmap-item.current .rd-icon {
     border-color: var(--neon-cyan);
     box-shadow: 0 0 10px var(--neon-cyan);
+    background: var(--card-bg);
+}
+
+.roadmap-item.current .rd-icon::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--neon-cyan);
+    border-radius: 50%;
 }
 
 .rd-content {
@@ -688,13 +785,16 @@ svg {
 .rd-phase {
     font-size: 0.7rem;
     color: var(--text-muted);
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
 .rd-desc {
-    font-size: 0.8rem;
+    color: #eee;
 }
 
-.roadmap-item.active .rd-phase {
+.roadmap-item.active .rd-phase,
+.roadmap-item.current .rd-phase {
     color: var(--neon-cyan);
 }
 
@@ -883,6 +983,22 @@ svg {
 
 /* Top Holders List */
 .holders-list { display: flex; flex-direction: column; gap: 8px; }
+
+/* Custom transparent scrollbar for holders list */
+.holders-list::-webkit-scrollbar {
+    width: 6px;
+}
+.holders-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+.holders-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+.holders-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
 .holder-item { 
     display: flex; align-items: center; justify-content: space-between; 
     padding: 10px; background: rgba(0,0,0,0.3); border-radius: 6px; 
@@ -1145,24 +1261,44 @@ svg {
     display: block;
 }
 
-/* Meme Thumbnails */
+/* Meme Grid & Thumbnails */
+.meme-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+}
+
+@media (max-width: 768px) {
+    .meme-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .meme-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 .meme-thumbnail {
     cursor: pointer;
     position: relative;
     width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    aspect-ratio: 16 / 9;
-    background: #000;
+    aspect-ratio: 1 / 1;
+    background: transparent;
     border-radius: 8px;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+    /* Optimasi: Hanya animasikan yang berubah & gunakan Hardware Acceleration (GPU) */
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease;
+    transform: translateZ(0); /* Paksa render di GPU agar tidak lag */
+    will-change: transform;
     overflow: hidden;
 }
 
 .meme-thumbnail:hover {
     border-color: var(--neon-cyan);
-    transform: scale(1.02);
+    transform: scale(1.03) translateZ(0);
+    z-index: 5;
 }
 
 .meme-play-btn {
@@ -1189,4 +1325,246 @@ svg {
     color: #000;
     border-color: var(--neon-cyan);
     transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* --- ADVANCED HOLOGRAPHIC HERO RIGHT --- */
+.hero-right {
+    position: relative;
+    width: 700px;
+    height: 600px; /* Taller to accommodate symmetric cards */
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+}
+
+/* Connection Lines */
+.connection-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* HUD Holographic Rings Behind */
+.hud-ring-container {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.15;
+}
+
+.hud-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--neon-cyan);
+}
+
+.outer-ring {
+    width: 100%;
+    height: 100%;
+    border-width: 2px;
+    border-style: dashed;
+    animation: spinSlow 30s linear infinite;
+}
+
+.inner-ring {
+    width: 75%;
+    height: 75%;
+    border-width: 4px;
+    border-style: dotted;
+    animation: spinSlowReverse 20s linear infinite;
+}
+
+/* 3D Glowing Podium */
+.platform-container {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%) rotateX(75deg);
+    width: 450px;
+    height: 450px;
+    transform-style: preserve-3d;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.podium-base {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #020813;
+    border: 4px solid var(--neon-cyan);
+    box-shadow: 0 15px 0 #005a70, 0 20px 40px rgba(0, 255, 255, 0.5);
+    transform: translateZ(-20px);
+}
+
+.podium-top {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 255, 255, 0.4) 0%, rgba(2, 8, 19, 0.9) 70%);
+    border: 4px solid var(--neon-cyan);
+    box-shadow: 0 0 50px var(--neon-cyan), inset 0 0 30px var(--neon-cyan);
+}
+
+.platform-glow-base {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 60%);
+    filter: blur(40px);
+    opacity: 0.7;
+    transform: translateZ(20px);
+    animation: pulseGlow 4s infinite alternate;
+}
+
+/* Center Assets (Frog & Broom) */
+.center-assets {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: 200px;
+    height: 200px;
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Fallback Emojis */
+.center-assets .frog, .center-assets .broom {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.center-assets .frog {
+    font-size: 180px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+}
+.center-assets .broom {
+    font-size: 150px;
+    left: -50px; top: 10px;
+    transform: rotate(-25deg);
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+    z-index: 11;
+}
+
+/* Actual Images (When uncommented in HTML) */
+.frog-img {
+    position: absolute;
+    width: 220px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 0 40px rgba(0, 255, 255, 0.5));
+}
+.broom-img {
+    position: absolute;
+    width: 170px;
+    left: -40px; top: 10px;
+    transform: rotate(-20deg);
+    z-index: 11;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.4));
+}
+
+/* HUD Cards - Horizontal Layout like Mockup */
+.hud-card {
+    position: absolute;
+    width: 200px;
+    padding: 12px 15px;
+    background: rgba(0, 15, 25, 0.7);
+    border: 1px solid var(--neon-cyan);
+    color: #fff;
+    backdrop-filter: blur(15px);
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.1);
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.hud-icon {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 5px var(--neon-cyan));
+}
+
+.hud-text {
+    text-align: left;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    letter-spacing: 0.5px;
+}
+
+/* Symmetrical Coordinates */
+.hud-top-left {
+    top: 80px;
+    left: 20px;
+}
+
+.hud-top-right {
+    top: 80px;
+    right: 20px;
+}
+
+.hud-bottom-left {
+    bottom: 80px;
+    left: 20px;
+}
+
+.hud-bottom-right {
+    bottom: 80px;
+    right: 20px;
+}
+
+/* Advanced Animations */
+@keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes spinSlowReverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 10px var(--neon-cyan), inset 0 0 10px var(--neon-cyan); opacity: 0.6; }
+    100% { box-shadow: 0 0 30px var(--neon-cyan), inset 0 0 30px var(--neon-cyan); opacity: 1; }
+}
+
+/* Responsiveness for new hero right */
+@media (max-width: 1200px) {
+    .hero-right { transform: scale(0.85); transform-origin: center; }
+}
+@media (max-width: 900px) {
+    .hero-right { transform: scale(0.65); margin-top: -30px; }
+}
+@media (max-width: 600px) {
+    .hero-right { transform: scale(0.45); margin-top: -80px; margin-bottom: -100px; }
 }
