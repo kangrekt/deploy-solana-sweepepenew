@@ -52,8 +52,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Real-time DexScreener Sync
-    const TOKEN_CA = 'Agmu8Xgn7rU4zFv4DMPrEBhYDdPsmiEG5hCiYyvSpump';
+    const caElement = document.getElementById('ca-text');
+    const TOKEN_CA = caElement ? caElement.innerText.trim() : '';
     const DEX_API_URL = `https://api.dexscreener.com/latest/dex/tokens/${TOKEN_CA}`;
+
+    // Update iframe chart dynamically
+    const chartIframe = document.querySelector('.chart-placeholder iframe');
+    if (chartIframe) {
+        chartIframe.src = `https://dexscreener.com/solana/${TOKEN_CA}?embed=1&theme=dark&trades=0&info=0`;
+    }
+    
+    // Update Solscan Holders link dynamically
+    const solscanLink = document.getElementById('solscan-holders-link');
+    if (solscanLink) {
+        solscanLink.href = `https://solscan.io/token/${TOKEN_CA}#holders`;
+    }
+    
+    // Update any Buy links to Pump.fun dynamically
+    document.querySelectorAll('a').forEach(link => {
+        if (link.innerText.includes('BUY') && link.getAttribute('href') === '#') {
+            link.href = `https://pump.fun/${TOKEN_CA}`;
+            link.target = "_blank";
+        }
+    });
 
     let latestTickerData = null;
     let isFirstFetch = true;
@@ -131,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         el.innerText = formattedSymbol;
                     }
                 });
-                
+
                 // Update Browser Title
                 document.title = formattedSymbol + " - Stop Wasting Everything";
             }
@@ -184,12 +205,12 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchRugCheckHolders() {
         const holdersList = document.getElementById('holders-list');
         if (!holdersList) return;
-        
+
         try {
             const response = await fetch(`https://api.rugcheck.xyz/v1/tokens/${TOKEN_CA}/report`);
             if (!response.ok) throw new Error("Rugcheck API error");
             const data = await response.json();
-            
+
             if (data) {
                 // Update Total Holders in Top Stats Bar
                 if (data.totalHolders) {
@@ -198,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         topHoldersStat.innerText = data.totalHolders.toLocaleString('en-US');
                     }
                 }
-                
+
                 // Calculate and Update Total Supply
                 if (data.topHolders && data.topHolders.length > 0) {
                     const firstHolder = data.topHolders[0];
@@ -206,39 +227,39 @@ document.addEventListener('DOMContentLoaded', () => {
                         // For memecoins (like Pump.fun) this correctly infers the original supply (e.g. 1B)
                         const calculatedSupply = Math.round(firstHolder.uiAmount / (firstHolder.pct / 100));
                         const formattedSupply = calculatedSupply.toLocaleString('en-US');
-                        
+
                         const supplyStat = document.getElementById('sync-stat-supply');
                         if (supplyStat) supplyStat.innerText = formattedSupply;
-                        
+
                         const supplyDonut = document.getElementById('sync-donut-supply');
                         if (supplyDonut) supplyDonut.innerText = formattedSupply;
                     }
                 }
-                
+
                 // Update Top Holders Card (if exists)
                 if (data.topHolders && holdersList) {
                     let html = '';
                     // Get top 8 accounts
-                for (let i = 0; i < Math.min(8, data.topHolders.length); i++) {
-                    const holder = data.topHolders[i];
-                    const percent = holder.pct.toFixed(2);
-                    let address = holder.address.substring(0,4) + '...' + holder.address.substring(holder.address.length - 4);
-                    let addrColor = "var(--text-main)";
-                    
-                    if (i === 0 && percent > 5) {
-                        address = "Raydium Pool / Maker";
-                        addrColor = "var(--neon-cyan)";
-                    } else if (holder.insider) {
-                        address += " (Insider)";
-                        addrColor = "#ff3366";
-                    }
-                    
-                    const amountStr = parseFloat(holder.uiAmountString).toLocaleString('en-US', { maximumFractionDigits: 0 });
-                    const ticker = (data.fileMeta && data.fileMeta.symbol) ? data.fileMeta.symbol : "TOKEN";
-                    
-                    html += `
+                    for (let i = 0; i < Math.min(8, data.topHolders.length); i++) {
+                        const holder = data.topHolders[i];
+                        const percent = holder.pct.toFixed(2);
+                        let address = holder.address.substring(0, 4) + '...' + holder.address.substring(holder.address.length - 4);
+                        let addrColor = "var(--text-main)";
+
+                        if (i === 0 && percent > 5) {
+                            address = "Raydium Pool / Maker";
+                            addrColor = "var(--neon-cyan)";
+                        } else if (holder.insider) {
+                            address += " (Insider)";
+                            addrColor = "#ff3366";
+                        }
+
+                        const amountStr = parseFloat(holder.uiAmountString).toLocaleString('en-US', { maximumFractionDigits: 0 });
+                        const ticker = (data.fileMeta && data.fileMeta.symbol) ? data.fileMeta.symbol : "TOKEN";
+
+                        html += `
                         <div class="holder-item">
-                            <div class="holder-rank">${i+1}</div>
+                            <div class="holder-rank">${i + 1}</div>
                             <div class="holder-info">
                                 <span class="holder-address" style="color: ${addrColor};">${address}</span>
                                 <span class="holder-amount">${amountStr} ${ticker}</span>
@@ -246,9 +267,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="holder-percent">${percent}%</div>
                         </div>
                     `;
-                }
-                
-                holdersList.innerHTML = html;
+                    }
+
+                    holdersList.innerHTML = html;
                 }
             }
         } catch (e) {
@@ -256,8 +277,100 @@ document.addEventListener('DOMContentLoaded', () => {
             holdersList.innerHTML = '<div style="text-align: center; color: #ff3366; padding: 20px;">Failed to load holders from Rugcheck. API rate limited.</div>';
         }
     }
-    
+
     // Initial fetch for holders
     fetchRugCheckHolders();
+    
+    // Load Memes from JSON
+    async function loadMemes() {
+        const memeContainer = document.getElementById('meme-grid-container');
+        if (!memeContainer) return;
+        
+        try {
+            // Append a random timestamp to prevent browser caching old memes.json
+            const response = await fetch('memes.json?t=' + new Date().getTime());
+            if (!response.ok) throw new Error("Could not load memes.json");
+            const memes = await response.json();
+            
+            memeContainer.innerHTML = '';
+            memes.forEach(meme => {
+                const memeDiv = document.createElement('div');
+                memeDiv.classList.add('meme-thumbnail');
+                memeDiv.style.backgroundImage = `url('${meme.thumbnail || "memehub/bought.png"}')`;
+                memeDiv.style.backgroundSize = "cover";
+                memeDiv.style.backgroundPosition = "center";
+                
+                // Empty innerHTML because user doesn't want the play button overlay initially
+                memeDiv.innerHTML = '';
+                
+                memeDiv.addEventListener('click', function playVideo() {
+                    // Replace background with actual video tag
+                    memeDiv.style.backgroundImage = 'none';
+                    memeDiv.innerHTML = ''; // clear first
+                    
+                    const videoEl = document.createElement('video');
+                    videoEl.src = meme.url;
+                    videoEl.type = 'video/mp4'; // Force MP4 type
+                    videoEl.controls = true;
+                    videoEl.autoplay = true;
+                    videoEl.playsInline = true;
+                    videoEl.style.width = '100%';
+                    videoEl.style.height = '100%';
+                    videoEl.style.objectFit = 'cover';
+                    videoEl.style.borderRadius = '8px';
+                    
+                    memeDiv.appendChild(videoEl);
+                    
+                    // Force play and catch errors
+                    const playPromise = videoEl.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.error("Autoplay prevented or video format error:", error);
+                        });
+                    }
+
+                    // Remove listener so it doesn't keep triggering
+                    memeDiv.removeEventListener('click', playVideo);
+                });
+                
+                memeContainer.appendChild(memeDiv);
+            });
+        } catch (error) {
+            console.error("Error loading memes:", error);
+            memeContainer.innerHTML = '<div style="color: #aaa; grid-column: 1 / -1; text-align: center;">Could not load memes...</div>';
+        }
+    }
+    
+    // Video Modal Logic
+    const videoModal = document.getElementById('video-modal');
+    const videoModalBody = document.getElementById('video-modal-body');
+    const videoModalClose = document.querySelector('.video-modal-close');
+
+    function openVideoModal(url) {
+        if (!videoModal) return;
+                    videoModalBody.innerHTML = `
+                        <video src="${url}" type="video/mp4" controls autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;"></video>
+                    `;videoModal.style.display = 'flex';
+    }
+
+    function closeVideoModal() {
+        if (!videoModal) return;
+        videoModal.style.display = 'none';
+        videoModalBody.innerHTML = ''; // This stops the video completely
+    }
+
+    if (videoModalClose) {
+        videoModalClose.addEventListener('click', closeVideoModal);
+    }
+
+    if (videoModal) {
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) {
+                closeVideoModal();
+            }
+        });
+    }
+    
+    loadMemes();
 
 });
