@@ -24,7 +24,9 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-main);
     font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
+    overflow-x: auto;
+    min-width: 1920px; /* Lock to 1920x1080 */
+    min-height: 100vh;
     line-height: 1.6;
 }
 
@@ -622,6 +624,30 @@ svg {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* Live Chart Placeholder */
+.chart-placeholder {
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    height: 450px;
+    border-radius: 8px;
+}
+
+.chart-placeholder iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 65px); /* Hide footer */
+    border: none;
+}
+
+@media (max-width: 1px) {
+    .chart-placeholder {
+        height: 600px; /* DexScreener mobile UI is taller */
+    }
+}
+
 /* Left Col: Tokenomics */
 .donut-chart-placeholder {
     width: 150px;
@@ -1100,7 +1126,7 @@ svg {
 }
 
 /* Responsive */
-@media (max-width: 1200px) {
+@media (max-width: 1px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
@@ -1114,7 +1140,7 @@ svg {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1px) {
     .hero-section {
         flex-direction: column;
         text-align: center;
@@ -1231,10 +1257,10 @@ svg {
 .video-modal-content {
     position: relative;
     width: 90%;
-    max-width: 800px;
+    max-width: 450px; /* Sized to match exactly 2x2 meme thumbnails */
     background: #000;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+    box-shadow: 0 0 20px var(--neon-cyan);
     padding: 10px;
 }
 
@@ -1253,12 +1279,13 @@ svg {
     color: var(--neon-cyan);
 }
 
-#video-modal-body iframe {
+#video-modal-body iframe, #video-modal-body img {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 1 / 1; /* Force square aspect ratio like the 2x2 grid */
     border-radius: 8px;
     border: none;
     display: block;
+    object-fit: contain;
 }
 
 /* Meme Grid & Thumbnails */
@@ -1268,13 +1295,13 @@ svg {
     gap: 15px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1px) {
     .meme-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1px) {
     .meme-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1559,12 +1586,12 @@ svg {
 }
 
 /* Responsiveness for new hero right */
-@media (max-width: 1200px) {
+@media (max-width: 1px) {
     .hero-right { transform: scale(0.85); transform-origin: center; }
 }
-@media (max-width: 900px) {
+@media (max-width: 1px) {
     .hero-right { transform: scale(0.65); margin-top: -30px; }
 }
-@media (max-width: 600px) {
+@media (max-width: 1px) {
     .hero-right { transform: scale(0.45); margin-top: -80px; margin-bottom: -100px; }
 }
