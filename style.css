@@ -842,17 +842,7 @@ svg {
     font-weight: 600;
 }
 
-.chart-placeholder {
-    background: #000;
-    border: 1px solid #222;
-    border-radius: 8px;
-    flex: 1;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
+
 
 .fake-chart-bars {
     width: 100%;
