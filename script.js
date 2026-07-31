@@ -1,9 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Auto-Scale Layout to fit any screen like an image ---
+    // --- Auto-Scale Layout to fit any screen like an image (Desktop Only) ---
     function autoScaleLayout() {
+        const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            document.body.style.zoom = 1;
+            document.body.style.transform = 'none';
+            document.body.style.width = '100%';
+            document.documentElement.style.height = 'auto';
+            return;
+        }
+
         const targetWidth = 1920;
         const currentWidth = window.innerWidth;
         const scale = currentWidth / targetWidth;
+        
+        // Lock width to 1920px for desktop scaling
+        document.body.style.width = '1920px';
         
         // Use CSS zoom for WebKit/Blink (Chrome, Edge, Safari, Opera)
         document.body.style.zoom = scale;
@@ -422,8 +435,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const memeGridRect = memeContainer.getBoundingClientRect();
                     const holdersListRect = holdersList.getBoundingClientRect();
 
-                    // Calculate current JS scale factor applied to the body
-                    const scale = window.innerWidth / 1920;
+                    // Calculate current JS scale factor applied to the body (if desktop)
+                    const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
+                    const scale = isMobile ? 1 : (window.innerWidth / 1920);
 
                     // Pixel-perfect calculation: Bottom of meme grid - Top of holders list, divided by scale
                     const targetHeight = (memeGridRect.bottom - holdersListRect.top) / scale;
