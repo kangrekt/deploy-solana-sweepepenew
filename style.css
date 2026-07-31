@@ -236,6 +236,10 @@ svg {
     border: none;
 }
 
+.btn-primary .dynamic-symbol {
+    color: #000;
+}
+
 .btn-primary:hover {
     background-color: #fff;
     box-shadow: 0 0 25px rgba(0, 240, 255, 0.8);
@@ -550,7 +554,7 @@ svg {
     border-radius: 10px;
     padding: 20px 30px;
     margin-bottom: 40px;
-    backdrop-filter: blur(5px);
+
 }
 
 .stat-box {
@@ -1246,7 +1250,7 @@ svg {
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(5px);
+
 }
 
 .video-modal-content {
@@ -1514,7 +1518,7 @@ svg {
     background: rgba(0, 15, 25, 0.7);
     border: 1px solid var(--neon-cyan);
     color: #fff;
-    backdrop-filter: blur(15px);
+
     border-radius: 8px;
     font-family: 'Orbitron', sans-serif;
     font-size: 0.8rem;
