@@ -25,7 +25,7 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-main);
-    width: 1920px; /* Base structural width */
+    width: 100%; /* Will be overridden by JS for desktop */
     overflow-x: hidden;
     min-height: 100vh;
     line-height: 1.6;
@@ -643,7 +643,7 @@ svg {
     border: none;
 }
 
-@media (max-width: 1px) {
+@media (max-width: 768px) {
     .chart-placeholder {
         height: 600px; /* DexScreener mobile UI is taller */
     }
@@ -1127,7 +1127,7 @@ svg {
 }
 
 /* Responsive */
-@media (max-width: 1px) {
+@media (max-width: 1200px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
@@ -1141,7 +1141,7 @@ svg {
     }
 }
 
-@media (max-width: 1px) {
+@media (max-width: 768px) {
     .hero-section {
         flex-direction: column;
         text-align: center;
@@ -1162,7 +1162,11 @@ svg {
         right: auto;
         padding: 10px;
         font-size: 0.8rem;
-        transform: translateX(-50%) rotate(5deg);
+        transform: translateX(-50%) rotate(-5deg);
+    }
+
+    .hero-left h1 {
+        font-size: 2.5rem;
     }
 
     .ca-container {
@@ -1296,13 +1300,13 @@ svg {
     gap: 15px;
 }
 
-@media (max-width: 1px) {
+@media (max-width: 768px) {
     .meme-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
-@media (max-width: 1px) {
+@media (max-width: 480px) {
     .meme-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1587,12 +1591,12 @@ svg {
 }
 
 /* Responsiveness for new hero right */
-@media (max-width: 1px) {
+@media (max-width: 1200px) {
     .hero-right { transform: scale(0.85); transform-origin: center; }
 }
-@media (max-width: 1px) {
+@media (max-width: 900px) {
     .hero-right { transform: scale(0.65); margin-top: -30px; }
 }
-@media (max-width: 1px) {
+@media (max-width: 600px) {
     .hero-right { transform: scale(0.45); margin-top: -80px; margin-bottom: -100px; }
 }
