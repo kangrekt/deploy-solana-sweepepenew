@@ -61,13 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (chartIframe) {
         chartIframe.src = `https://dexscreener.com/solana/${TOKEN_CA}?embed=1&theme=dark&trades=0&info=0`;
     }
-    
+
     // Update Solscan Holders link dynamically
     const solscanLink = document.getElementById('solscan-holders-link');
     if (solscanLink) {
         solscanLink.href = `https://solscan.io/token/${TOKEN_CA}#holders`;
     }
-    
+
     // Update any Buy links to Pump.fun dynamically
     document.querySelectorAll('a').forEach(link => {
         if (link.innerText.includes('BUY') && link.getAttribute('href') === '#') {
@@ -280,67 +280,136 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial fetch for holders
     fetchRugCheckHolders();
-    
+
     // Load Memes from JSON
     async function loadMemes() {
         const memeContainer = document.getElementById('meme-grid-container');
         if (!memeContainer) return;
-        
+
         try {
             // Append a random timestamp to prevent browser caching old memes.json
             const response = await fetch('memes.json?t=' + new Date().getTime());
             if (!response.ok) throw new Error("Could not load memes.json");
             const memes = await response.json();
-            
+
             memeContainer.innerHTML = '';
+            // Store all meme elements to easily paginate them
+            const memeElements = [];
+
             memes.forEach(meme => {
                 const memeDiv = document.createElement('div');
                 memeDiv.classList.add('meme-thumbnail');
-                memeDiv.style.backgroundImage = `url('${meme.thumbnail || "memehub/bought.png"}')`;
-                memeDiv.style.backgroundSize = "cover";
-                memeDiv.style.backgroundPosition = "center";
-                
-                // Empty innerHTML because user doesn't want the play button overlay initially
-                memeDiv.innerHTML = '';
-                
-                memeDiv.addEventListener('click', function playVideo() {
-                    // Replace background with actual video tag
-                    memeDiv.style.backgroundImage = 'none';
-                    memeDiv.innerHTML = ''; // clear first
-                    
-                    const videoEl = document.createElement('video');
-                    videoEl.src = meme.url;
-                    videoEl.type = 'video/mp4'; // Force MP4 type
-                    videoEl.controls = true;
-                    videoEl.autoplay = true;
-                    videoEl.playsInline = true;
-                    videoEl.style.width = '100%';
-                    videoEl.style.height = '100%';
-                    videoEl.style.objectFit = 'cover';
-                    videoEl.style.borderRadius = '8px';
-                    
-                    memeDiv.appendChild(videoEl);
-                    
-                    // Force play and catch errors
-                    const playPromise = videoEl.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            console.error("Autoplay prevented or video format error:", error);
-                        });
+                // Render as a pure image instead of background/video
+                memeDiv.innerHTML = `
+                    <img src="${meme.thumbnail || meme.url}" alt="${meme.title || 'Meme'}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
+                `;
+
+                // Optional: Open image in new tab if clicked
+                memeDiv.addEventListener('click', () => {
+                    window.open(meme.thumbnail || meme.url, '_blank');
+                });
+
+                memeContainer.appendChild(memeDiv);
+                memeElements.push(memeDiv);
+            });
+
+            // --- NEW: Lock Grid Height with Blank Placeholders ---
+            // Pad the array with invisible divs until it's a multiple of 12
+            // This ensures the grid always stays 2 rows tall even on the last page!
+            while (memeElements.length % 12 !== 0) {
+                const blankDiv = document.createElement('div');
+                blankDiv.classList.add('meme-thumbnail');
+                blankDiv.style.visibility = 'hidden'; // Takes up space but is invisible
+                memeContainer.appendChild(blankDiv);
+                memeElements.push(blankDiv);
+            }
+            // -----------------------------------------------------
+
+            // --- Pagination Logic ---
+            let currentPage = 0;
+            const itemsPerPage = 12; // Exactly 2 rows (6 columns * 2)
+            const prevBtn = document.getElementById('prev-memes-btn');
+            const nextBtn = document.getElementById('next-memes-btn');
+
+            function renderMemePage() {
+                const start = currentPage * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                memeElements.forEach((el, index) => {
+                    if (index >= start && index < end) {
+                        el.style.display = 'block';
+                    } else {
+                        el.style.display = 'none'; // Completely hides the element from the grid
+                    }
+                });
+
+                // Update button states
+                if (prevBtn && nextBtn) {
+                    if (currentPage === 0) {
+                        prevBtn.style.opacity = '0.5';
+                        prevBtn.style.pointerEvents = 'none';
+                    } else {
+                        prevBtn.style.opacity = '1';
+                        prevBtn.style.pointerEvents = 'auto';
                     }
 
-                    // Remove listener so it doesn't keep triggering
-                    memeDiv.removeEventListener('click', playVideo);
+                    if (end >= memeElements.length) {
+                        nextBtn.style.opacity = '0.5';
+                        nextBtn.style.pointerEvents = 'none';
+                    } else {
+                        nextBtn.style.opacity = '1';
+                        nextBtn.style.pointerEvents = 'auto';
+                    }
+                }
+            }
+
+            if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', () => {
+                    if (currentPage > 0) {
+                        currentPage--;
+                        renderMemePage();
+                    }
                 });
-                
-                memeContainer.appendChild(memeDiv);
-            });
+
+                nextBtn.addEventListener('click', () => {
+                    if ((currentPage + 1) * itemsPerPage < memeElements.length) {
+                        currentPage++;
+                        renderMemePage();
+                    }
+                });
+            }
+
+            // Function to strictly align Holders List with Meme Grid
+            function syncHoldersHeight() {
+                const holdersList = document.getElementById('holders-list');
+                if (memeContainer && holdersList) {
+                    // Reset height first to get accurate natural top position
+                    holdersList.style.maxHeight = 'none';
+
+                    const memeGridRect = memeContainer.getBoundingClientRect();
+                    const holdersListRect = holdersList.getBoundingClientRect();
+
+                    // Pixel-perfect calculation: Bottom of meme grid - Top of holders list
+                    const targetHeight = memeGridRect.bottom - holdersListRect.top;
+
+                    holdersList.style.maxHeight = Math.max(100, targetHeight) + 'px';
+                }
+            }
+
+            // Initial render
+            renderMemePage();
+
+            // Sync heights slightly after render to ensure images are calculated
+            setTimeout(syncHoldersHeight, 100);
+            window.addEventListener('resize', syncHoldersHeight);
+
+            // ------------------------
         } catch (error) {
             console.error("Error loading memes:", error);
             memeContainer.innerHTML = '<div style="color: #aaa; grid-column: 1 / -1; text-align: center;">Could not load memes...</div>';
         }
     }
-    
+
     // Video Modal Logic
     const videoModal = document.getElementById('video-modal');
     const videoModalBody = document.getElementById('video-modal-body');
@@ -348,9 +417,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openVideoModal(url) {
         if (!videoModal) return;
-                    videoModalBody.innerHTML = `
+        videoModalBody.innerHTML = `
                         <video src="${url}" type="video/mp4" controls autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;"></video>
-                    `;videoModal.style.display = 'flex';
+                    `; videoModal.style.display = 'flex';
     }
 
     function closeVideoModal() {
@@ -370,7 +439,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     loadMemes();
 
 });
+
+// Particles.js Init (From Clanker)
+if (window.particlesJS) {
+    particlesJS('particles-js', {
+        'particles': {
+            'number': { 'value': 80, 'density': { 'enable': true, 'value_area': 800 } },
+            'color': { 'value': '#00dfff' }, /* Changed from Clanker purple to Sweep Cyan */
+            'shape': { 'type': 'circle' },
+            'opacity': { 'value': 0.5, 'random': true },
+            'size': { 'value': 3, 'random': true },
+            'line_linked': { 'enable': true, 'distance': 150, 'color': '#00dfff', 'opacity': 0.2, 'width': 1 },
+            'move': { 'enable': true, 'speed': 2, 'direction': 'none', 'random': true, 'straight': false, 'out_mode': 'out', 'bounce': false }
+        },
+        'interactivity': {
+            'detect_on': 'canvas',
+            'events': {
+                'onhover': { 'enable': true, 'mode': 'grab' },
+                'onclick': { 'enable': true, 'mode': 'push' },
+                'resize': true
+            },
+            'modes': {
+                'grab': { 'distance': 140, 'line_linked': { 'opacity': 1 } },
+                'push': { 'particles_nb': 4 }
+            }
+        },
+        'retina_detect': true
+    });
+}
