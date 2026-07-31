@@ -1,1592 +1,523 @@
-/* Cyberpunk High-Tech Theme variables (Inherited from solana1/WEB1) */
-:root {
-    --bg-dark: #03050c;
-    --bg-surface: #0a0f1d;
-    --neon-cyan: #00f0ff;
-    --neon-blue: #0044ff;
-    --text-main: #ffffff;
-    --text-muted: #8a9bb5;
-    --border-color: rgba(0, 240, 255, 0.2);
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Auto-Scale Layout to fit any screen like an image (Desktop Only) ---
+    function autoScaleLayout() {
+        const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            document.body.style.zoom = 1;
+            document.body.style.transform = 'none';
+            document.body.style.width = '100%';
+            document.documentElement.style.height = 'auto';
+            return;
+        }
 
-    /* New specific colors for the dashboard */
-    --card-bg: rgba(10, 15, 29, 0.6);
-    --up-green: #39ff14;
-    --danger-red: #ff3333;
-}
+        const targetWidth = 1920;
+        const currentWidth = window.innerWidth;
+        const scale = currentWidth / targetWidth;
+        
+        // Lock width to 1920px for desktop scaling
+        document.body.style.width = '1920px';
+        
+        // Use CSS zoom for WebKit/Blink (Chrome, Edge, Safari, Opera)
+        document.body.style.zoom = scale;
+        
+        // Fallback for Firefox
+        if (navigator.userAgent.toLowerCase().includes('firefox')) {
+            document.body.style.transform = `scale(${scale})`;
+            document.body.style.transformOrigin = 'top left';
+            // Adjust height to prevent empty space below
+            document.documentElement.style.height = (document.body.scrollHeight * scale) + 'px';
+        }
+    }
+    window.addEventListener('resize', autoScaleLayout);
+    autoScaleLayout(); // Run immediately
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    // Copy CA to Clipboard (Hero Section)
+    const copyBtn = document.getElementById('copy-btn');
+    const caText = document.getElementById('ca-text');
 
-body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    width: 100%; /* Will be overridden by JS for desktop */
-    overflow-x: hidden;
-    min-height: 100vh;
-    line-height: 1.6;
-}
-
-h1,
-h2,
-h3,
-h4,
-.btn,
-.nav-links a,
-.title,
-.ticker,
-.stat-value,
-.donut-value {
-    font-family: 'Orbitron', sans-serif;
-}
-
-/* Fluid Media & General Layout Locking */
-img,
-iframe,
-video,
-canvas,
-svg {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* Background Effects (From WEB1) */
-
-.glow-orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(100px);
-    z-index: -1;
-    opacity: 0.4;
-}
-
-/* --- NIGHT SKY UNIVERSE --- */
-.star-universe {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    z-index: -3;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-/* Tiny Background Stars */
-.star-layer {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-}
-.layer-1 {
-    background-image: 
-      radial-gradient(1.5px 1.5px at 10% 15%, rgba(255,255,255,0.8), transparent),
-      radial-gradient(2px 2px at 25% 40%, rgba(255,255,255,1), transparent),
-      radial-gradient(1px 1px at 45% 5%, rgba(255,255,255,0.6), transparent),
-      radial-gradient(1.5px 1.5px at 60% 70%, rgba(255,255,255,0.9), transparent),
-      radial-gradient(2px 2px at 80% 25%, rgba(255,255,255,0.7), transparent),
-      radial-gradient(1px 1px at 90% 85%, rgba(255,255,255,1), transparent),
-      radial-gradient(1.5px 1.5px at 30% 90%, rgba(255,255,255,0.5), transparent),
-      radial-gradient(2px 2px at 75% 60%, rgba(255,255,255,0.8), transparent);
-    background-size: 250px 250px;
-    animation: twinkleStar 4s infinite alternate ease-in-out;
-}
-.layer-2 {
-    background-image: 
-      radial-gradient(2px 2px at 5% 50%, rgba(0,255,255,0.8), transparent),
-      radial-gradient(1.5px 1.5px at 35% 20%, rgba(255,255,255,0.5), transparent),
-      radial-gradient(1px 1px at 65% 80%, rgba(255,255,255,1), transparent),
-      radial-gradient(2.5px 2.5px at 85% 15%, rgba(255,255,255,0.9), transparent),
-      radial-gradient(1.5px 1.5px at 95% 65%, rgba(0,255,255,0.7), transparent);
-    background-size: 350px 350px;
-    animation: twinkleStar 6s infinite alternate-reverse ease-in-out;
-}
-
-@keyframes twinkleStar {
-    0% { opacity: 0.3; }
-    100% { opacity: 1; }
-}
-
-/* Shiny Multi-Pointed Stars (Segi-banyak) */
-.shiny-star {
-    position: absolute;
-    width: 35px; height: 35px;
-    background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 C50 40 60 50 100 50 C60 50 50 60 50 100 C50 60 40 50 0 50 C40 50 50 40 50 0 Z" fill="rgba(255, 255, 255, 0.9)" filter="drop-shadow(0 0 5px rgba(0,255,255,0.8))"/></svg>') center/contain no-repeat;
-    animation: shinyPulse 3s infinite alternate ease-in-out;
-}
-
-@keyframes shinyPulse {
-    0% { transform: scale(0.6) rotate(0deg); opacity: 0.4; filter: brightness(0.8); }
-    100% { transform: scale(1.3) rotate(15deg); opacity: 1; filter: brightness(1.5); }
-}
-
-/* Meteor (Hujan Meteor) */
-.meteor {
-    position: absolute;
-    width: 2px;
-    height: 120px;
-    background: linear-gradient(to bottom, transparent, rgba(0, 255, 255, 1) 80%, rgba(255, 255, 255, 1) 100%);
-    border-radius: 50%;
-    transform: rotate(-45deg);
-    opacity: 0;
-    box-shadow: 0 0 10px rgba(0,255,255,0.5);
-}
-.m-1 {
-    top: -150px; left: 30%;
-    animation: meteorFall 10s infinite linear;
-    animation-delay: 2s;
-}
-.m-2 {
-    top: -150px; left: 70%;
-    animation: meteorFall 18s infinite linear;
-    animation-delay: 8s;
-}
-
-@keyframes meteorFall {
-    0% { transform: rotate(-45deg) translate(0, 0); opacity: 0; }
-    2% { opacity: 1; }
-    15% { transform: rotate(-45deg) translate(0, 1800px); opacity: 0; }
-    100% { transform: rotate(-45deg) translate(0, 1800px); opacity: 0; }
-}
-
-/* --- PARTICLES --- */
-#particles-js {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    z-index: -2;
-    pointer-events: none;
-}
-
-.orb-1 {
-    width: 400px;
-    height: 400px;
-    background: var(--neon-cyan);
-    top: -100px;
-    left: -100px;
-    animation: floatOrb 10s ease-in-out infinite alternate;
-}
-
-.orb-2 {
-    width: 500px;
-    height: 500px;
-    background: var(--neon-blue);
-    bottom: -200px;
-    right: -100px;
-    animation: floatOrb 15s ease-in-out infinite alternate-reverse;
-}
-
-@keyframes floatOrb {
-    0% {
-        transform: translate(0, 0);
+    if (copyBtn && caText) {
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(caText.innerText).then(() => {
+                const originalText = copyBtn.innerText;
+                copyBtn.innerText = '✅';
+                setTimeout(() => {
+                    copyBtn.innerText = originalText;
+                }, 2000);
+            });
+        });
     }
 
-    100% {
-        transform: translate(50px, 50px);
-    }
-}
+    // Copy CA (Small buttons in dashboard and footer)
+    const smallCopyBtns = document.querySelectorAll('.copy-btn-small');
+    smallCopyBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            // Find the nearest text to copy
+            const container = e.target.closest('.ca-container-small') || e.target.closest('.ca-box');
+            if (container) {
+                const textToCopy = container.querySelector('.ca-text-small').innerText;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalText = e.target.innerText;
+                    e.target.innerText = '✅';
+                    setTimeout(() => {
+                        e.target.innerText = originalText;
+                    }, 2000);
+                });
+            }
+        });
+    });
 
-/* Utilities */
-.neon-text {
-    color: var(--neon-cyan);
-    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.3);
-}
+    // Smooth Scrolling for Nav Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
 
-.up {
-    color: var(--up-green);
-}
+                // Update active class
+                document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
 
-.text-white {
-    color: #fff;
-}
+    // Real-time DexScreener Sync
+    const caElement = document.getElementById('ca-text');
+    const TOKEN_CA = caElement ? caElement.innerText.trim() : '';
+    const isSoon = !TOKEN_CA || TOKEN_CA.toUpperCase() === 'SOON';
 
-.white {
-    color: #fff;
-    font-weight: bold;
-}
+    const DEX_API_URL = `https://api.dexscreener.com/latest/dex/tokens/${TOKEN_CA}`;
 
-.container {
-    max-width: 95%;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Buttons */
-.btn {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    text-decoration: none;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-radius: 4px;
-    text-align: center;
-}
-
-.btn-primary {
-    background-color: var(--neon-cyan);
-    color: #000;
-    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
-    border: none;
-}
-
-.btn-primary:hover {
-    background-color: #fff;
-    box-shadow: 0 0 25px rgba(0, 240, 255, 0.8);
-}
-
-.btn-secondary {
-    background-color: transparent;
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
-}
-
-.btn-secondary:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.btn-outline {
-    background-color: transparent;
-    color: var(--neon-cyan);
-    border: 1px solid var(--neon-cyan);
-    box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.2);
-}
-
-.btn-outline:hover {
-    background-color: rgba(0, 240, 255, 0.1);
-}
-
-.btn-nav {
-    padding: 8px 16px;
-    font-size: 0.8rem;
-}
-
-.btn-full {
-    width: 100%;
-    margin-top: 15px;
-}
-
-/* Navbar */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 5%;
-    background: rgba(10, 15, 29, 0.95);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.logo-circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #111;
-    border: 2px solid var(--neon-cyan);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    box-shadow: 0 0 10px var(--neon-cyan);
-}
-
-.logo-text {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    justify-content: center;
-}
-
-.dynamic-symbol {
-    font-weight: 900;
-    color: var(--neon-cyan);
-}
-
-.tagline {
-    font-size: 0.6rem;
-    color: var(--text-main);
-    letter-spacing: 1px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 20px;
-}
-
-.nav-links a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-    color: var(--neon-cyan);
-}
-
-/* Ticker Bar */
-.ticker-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 5%;
-    background: rgba(0, 0, 0, 0.8);
-    border-bottom: 1px solid var(--border-color);
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
-.ticker-wrap {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    margin-right: 20px;
-    white-space: nowrap;
-}
-
-.ticker-move {
-    display: inline-flex;
-    gap: 15px;
-    align-items: center;
-    animation: tickerScroll 25s linear infinite;
-}
-
-@keyframes tickerScroll {
-    0% {
-        transform: translateX(100vw);
+    // Update iframe chart dynamically
+    const chartIframe = document.querySelector('.chart-placeholder iframe');
+    if (isSoon) {
+        const chartPlaceholder = document.querySelector('.chart-placeholder');
+        if (chartPlaceholder) {
+            chartPlaceholder.innerHTML = '<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size: 4rem; font-weight: 900; color: var(--neon-cyan); letter-spacing: 5px; text-shadow: 0 0 20px var(--neon-cyan); font-family: \'Orbitron\', sans-serif;">SOON</div>';
+        }
+        document.querySelectorAll('.dynamic-symbol').forEach(el => {
+            el.innerText = '$SWEEP';
+        });
+        document.title = "$SWEEP - Stop Wasting Everything";
+    } else if (chartIframe) {
+        chartIframe.src = `https://dexscreener.com/solana/${TOKEN_CA}?embed=1&theme=dark&trades=0&info=0`;
     }
 
-    100% {
-        transform: translateX(-100%);
-    }
-}
-
-.separator {
-    opacity: 0.3;
-}
-
-.social-icons {
-    display: flex;
-    gap: 15px;
-}
-
-.social-icons a {
-    color: var(--text-main);
-    text-decoration: none;
-    background: rgba(255, 255, 255, 0.1);
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-}
-
-.social-icons a:hover {
-    background: var(--neon-cyan);
-    color: #000;
-    box-shadow: 0 0 10px var(--neon-cyan);
-}
-
-/* Hero Section */
-.hero-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 60px 0;
-    gap: 40px;
-}
-
-.hero-content {
-    flex: 1;
-    max-width: 650px;
-    width: 100%;
-}
-
-.title {
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    line-height: 1.1;
-    margin-bottom: 20px;
-}
-
-.subtitle {
-    font-size: clamp(0.9rem, 2vw, 1rem);
-    color: var(--text-muted);
-    margin-bottom: 30px;
-    line-height: 1.5;
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-.ca-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    padding: 10px 15px;
-    border-radius: 8px;
-    max-width: 100%;
-    width: 500px;
-}
-
-.ca-info {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    width: 100%;
-}
-
-.ca-label {
-    font-size: 0.65rem;
-    color: var(--text-muted);
-    margin-bottom: 2px;
-}
-
-#ca-text {
-    font-family: monospace;
-    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
-    color: var(--text-main);
-    word-break: break-all;
-    overflow-wrap: break-word;
-    display: inline-block;
-    max-width: 100%;
-}
-
-.copy-btn {
-    background: transparent;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: var(--text-muted);
-    transition: 0.3s;
-}
-
-.copy-btn:hover {
-    color: var(--neon-cyan);
-}
-
-.hero-visual {
-    flex: 1;
-    position: relative;
-    display: flex;
-    justify-content: center;
-}
-
-.hero-placeholder-box {
-    width: 100%;
-    max-width: 600px;
-    min-height: 450px;
-    background: transparent;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: none;
-    position: relative;
-}
-
-.hero-placeholder-box::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 150%;
-    height: 150%;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, transparent 70%);
-    z-index: -1;
-}
-
-.floating-mascot {
-    font-size: 10rem;
-    animation: floatImg 6s ease-in-out infinite;
-}
-
-.floating-badge {
-    position: absolute;
-    top: 30px;
-    left: 65%;
-    background: rgba(10, 15, 29, 0.9);
-    border: 1px solid var(--neon-cyan);
-    padding: 15px;
-    color: var(--neon-cyan);
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 700;
-    text-align: center;
-    line-height: 1.2;
-    transform: translateX(-50%) rotate(5deg);
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-    z-index: 10;
-}
-
-/* Stats Bar */
-.stats-bar {
-    display: flex;
-    justify-content: space-between;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 20px 30px;
-    margin-bottom: 40px;
-    backdrop-filter: blur(5px);
-}
-
-.stat-box {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.stat-icon {
-    font-size: 1.8rem;
-    color: var(--neon-cyan);
-}
-
-.stat-data {
-    display: flex;
-    flex-direction: column;
-}
-
-.stat-title {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    font-weight: 700;
-}
-
-.stat-value {
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    font-weight: 700;
-}
-
-/* Dashboard Grid */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 350px 1fr 350px;
-    gap: 20px;
-    margin-bottom: 60px;
-}
-
-/* Cards */
-.card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    backdrop-filter: blur(5px);
-}
-
-.card-header {
-    padding: 15px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    text-align: center;
-}
-
-.card-header h2 {
-    font-size: 1rem;
-    color: var(--text-main);
-}
-
-.card-body {
-    padding: 20px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-body.no-pad {
-    padding: 0;
-}
-
-.card-footer {
-    padding: 15px 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Live Chart Placeholder */
-.chart-placeholder {
-    padding: 0;
-    overflow: hidden;
-    position: relative;
-    height: 450px;
-    border-radius: 8px;
-}
-
-.chart-placeholder iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: calc(100% + 65px); /* Hide footer */
-    border: none;
-}
-
-@media (max-width: 768px) {
-    .chart-placeholder {
-        height: 400px; /* Adjusted to fit mobile screens better */
-    }
-}
-
-/* Left Col: Tokenomics */
-.donut-chart-placeholder {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background: var(--neon-cyan);
-    margin: 0 auto 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.donut-chart-placeholder::after {
-    content: '';
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    background-color: #0b1120;
-    border-radius: 50%;
-    z-index: 1;
-}
-
-.donut-inner {
-    text-align: center;
-    position: relative;
-    z-index: 2;
-}
-
-.donut-title {
-    display: block;
-    font-size: 0.5rem;
-    color: var(--text-muted);
-}
-
-.donut-value {
-    display: block;
-    font-size: 0.7rem;
-    font-weight: 700;
-}
-
-.donut-ticker {
-    display: block;
-    font-size: 0.6rem;
-    color: var(--neon-cyan);
-}
-
-.tokenomics-list {
-    list-style: none;
-    font-size: 0.8rem;
-}
-
-.tokenomics-list li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    color: var(--text-muted);
-}
-
-.dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 8px;
-}
-
-.dot-liq {
-    background: var(--neon-cyan);
-}
-
-.dot-mkt {
-    background: #555;
-}
-
-.dot-com {
-    background: #777;
-}
-
-.dot-brn {
-    background: #ff3333;
-}
-
-.dot-tm {
-    background: #999;
-}
-
-.percent {
-    color: var(--text-main);
-    font-weight: 600;
-}
-
-/* Left Col: Roadmap */
-.roadmap-body {
-    display: flex;
-    flex-direction: column;
-    gap: 25px; /* Increased gap for better timeline feel */
-    position: relative;
-}
-
-/* Connecting Line */
-.roadmap-body::before {
-    content: '';
-    position: absolute;
-    top: 30px; /* Start slightly lower so it doesn't poke out top */
-    bottom: 30px; /* End slightly higher */
-    left: 31px; /* 20px padding + 12px half-icon - 1px half-line */
-    width: 2px;
-    background: rgba(255, 255, 255, 0.3); /* Made much brighter to be clearly visible */
-    z-index: 1;
-}
-
-.roadmap-item {
-    display: flex;
-    gap: 15px;
-    align-items: flex-start;
-    position: relative;
-    z-index: 2; /* Sit above the line */
-}
-
-.rd-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 2px solid var(--text-muted);
-    background: var(--card-bg); /* Opaque background to hide line behind it */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    color: #000;
-    flex-shrink: 0;
-}
-
-.roadmap-item.active .rd-icon {
-    background: var(--neon-cyan);
-    border-color: var(--neon-cyan);
-    color: #000; /* For the checkmark */
-}
-
-.roadmap-item.current .rd-icon {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 10px var(--neon-cyan);
-    background: var(--card-bg);
-}
-
-.roadmap-item.current .rd-icon::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background: var(--neon-cyan);
-    border-radius: 50%;
-}
-
-.rd-content {
-    display: flex;
-    flex-direction: column;
-}
-
-.rd-phase {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.rd-desc {
-    color: #eee;
-}
-
-.roadmap-item.active .rd-phase,
-.roadmap-item.current .rd-phase {
-    color: var(--neon-cyan);
-}
-
-/* Center Col: Chart */
-.chart-card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.chart-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.chart-pair {
-    font-weight: 600;
-}
-
-
-
-.fake-chart-bars {
-    width: 100%;
-    height: 150px;
-    background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(57, 255, 20, 0.2) 10px, rgba(57, 255, 20, 0.2) 15px);
-}
-
-.chart-watermark {
-    position: absolute;
-    bottom: 10px;
-    font-size: 0.7rem;
-    color: #555;
-}
-
-/* Center Col: Meme Hub */
-.meme-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
-    justify-content: center;
-}
-
-.meme-item {
-    background: transparent;
-    border: none;
-    border-radius: 8px;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-}
-
-.meme-item iframe {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 8px;
-}
-
-/* Right Col: Buy & News */
-.subtitle-small {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-}
-
-.dex-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.dex-btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    text-decoration: none;
-    color: var(--text-main);
-    transition: 0.3s;
-}
-
-.dex-btn:hover {
-    background: rgba(0, 240, 255, 0.05);
-}
-
-.dex-icon {
-    font-size: 1.5rem;
-}
-
-.dex-info {
-    flex: 1;
-    margin-left: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-.dex-buy {
-    font-size: 0.6rem;
-    color: var(--text-muted);
-}
-
-.dex-name {
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-.arrow {
-    color: var(--text-muted);
-}
-
-.ca-container-small {
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: auto;
-    min-width: 0;
-}
-
-.ca-text-small {
-    font-family: monospace;
-    font-size: clamp(0.6rem, 2vw, 0.7rem);
-    color: var(--text-muted);
-    word-break: break-all;
-    overflow-wrap: break-word;
-    display: inline-block;
-    max-width: 100%;
-    min-width: 0;
-}
-
-.copy-btn-small {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--text-muted);
-}
-
-.copy-btn-small:hover {
-    color: var(--neon-cyan);
-}
-
-.news-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.news-item {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.news-img {
-    width: 50px;
-    height: 50px;
-    background: #111;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    border: 1px solid #333;
-}
-
-.news-info h4 {
-    font-size: 0.8rem;
-    margin-bottom: 3px;
-    font-family: 'Inter', sans-serif;
-}
-
-.news-date {
-    font-size: 0.65rem;
-    color: var(--text-muted);
-}
-
-/* Top Holders List */
-.holders-list { display: flex; flex-direction: column; gap: 8px; }
-
-/* Custom transparent scrollbar for holders list */
-.holders-list::-webkit-scrollbar {
-    width: 6px;
-}
-.holders-list::-webkit-scrollbar-track {
-    background: transparent;
-}
-.holders-list::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-}
-.holders-list::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
-}
-
-.holder-item { 
-    display: flex; align-items: center; justify-content: space-between; 
-    padding: 10px; background: rgba(0,0,0,0.3); border-radius: 6px; 
-    border: 1px solid rgba(255,255,255,0.05);
-}
-.holder-rank { 
-    width: 25px; height: 25px; background: var(--neon-cyan); color: #000; 
-    border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-    font-size: 0.7rem; font-weight: bold; margin-right: 12px;
-}
-.holder-info { flex: 1; display: flex; flex-direction: column; }
-.holder-address { font-size: 0.8rem; font-weight: bold; font-family: monospace; color: var(--text-main); }
-.holder-amount { font-size: 0.65rem; color: var(--text-muted); }
-.holder-percent { font-size: 0.8rem; font-weight: bold; color: var(--up-green); }
-
-/* Footer */
-.footer {
-    background: rgba(0, 0, 0, 0.9);
-    border-top: 1px solid var(--border-color);
-    padding: 50px 0 20px;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 40px;
-    margin-bottom: 40px;
-}
-
-.footer-col h3 {
-    font-size: 1rem;
-    margin-bottom: 20px;
-}
-
-.footer-col p {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-bottom: 20px;
-}
-
-.footer-logo-small {
-    font-size: 2rem;
-}
-
-.footer-col ul {
-    list-style: none;
-}
-
-.footer-col ul li {
-    margin-bottom: 10px;
-}
-
-.footer-col ul a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.8rem;
-    transition: 0.3s;
-}
-
-.footer-col ul a:hover {
-    color: var(--neon-cyan);
-}
-
-.ca-container-footer {
-    background: #111;
-    border: 1px solid #333;
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-}
-
-.ca-box {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 5px;
-}
-
-.audit-info,
-.network-info {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #222;
-    font-size: 0.8rem;
-}
-
-.network-badge {
-    color: var(--neon-blue);
-    font-weight: 700;
-}
-
-.footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    border-top: 1px solid #222;
-    padding-top: 20px;
-    font-size: 0.7rem;
-    color: var(--text-muted);
-}
-
-/* Responsive */
-@media (max-width: 1200px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr;
+    // Update Solscan Holders link dynamically
+    const solscanLink = document.getElementById('solscan-holders-link');
+    if (solscanLink) {
+        solscanLink.href = `https://solscan.io/token/${TOKEN_CA}#holders`;
     }
 
-    .footer-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    // Update any Buy links to Pump.fun dynamically
+    document.querySelectorAll('a').forEach(link => {
+        if (link.innerText.includes('BUY') && link.getAttribute('href') === '#') {
+            link.href = `https://pump.fun/${TOKEN_CA}`;
+            link.target = "_blank";
+        }
+    });
+
+    let latestTickerData = null;
+    let isFirstFetch = true;
+
+    async function fetchDexData() {
+        if (isSoon) return;
+        try {
+            const response = await fetch(DEX_API_URL);
+            const data = await response.json();
+
+            if (data && data.pairs && data.pairs.length > 0) {
+                // Find the best pair
+                const pair = data.pairs[0];
+
+                // Format numbers
+                const priceUsd = parseFloat(pair.priceUsd);
+                let formattedPrice = '$' + priceUsd.toFixed(8);
+                if (priceUsd > 0.01) formattedPrice = '$' + priceUsd.toFixed(4);
+
+                const mcapValue = pair.marketCap || pair.fdv || 0;
+                const formattedMcap = '$' + mcapValue.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+                const volM5Value = (pair.volume && pair.volume.m5) ? pair.volume.m5 : 0;
+                const formattedVolM5 = '$' + volM5Value.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+                const volH1Value = (pair.volume && pair.volume.h1) ? pair.volume.h1 : 0;
+                const formattedVolH1 = '$' + volH1Value.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+                const volH6Value = (pair.volume && pair.volume.h6) ? pair.volume.h6 : 0;
+                const formattedVolH6 = '$' + volH6Value.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+                const volH24Value = (pair.volume && pair.volume.h24) ? pair.volume.h24 : 0;
+                const formattedVolH24 = '$' + volH24Value.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+                const priceChange = pair.priceChange && pair.priceChange.h24 ? pair.priceChange.h24 : 0;
+                const isPositive = priceChange >= 0;
+                const changeIcon = isPositive ? '▲' : '▼';
+                const changeClass = isPositive ? 'up' : 'down';
+                const formattedChange = `${changeIcon} ${Math.abs(priceChange).toFixed(2)}%`;
+
+                const symbol = pair.baseToken && pair.baseToken.symbol ? pair.baseToken.symbol : 'SWEEP';
+                const formattedSymbol = '$' + symbol.replace(/^\$/, ''); // Ensure only one $
+
+                // Save latest ticker data
+                latestTickerData = {
+                    price: formattedPrice,
+                    change: formattedChange,
+                    changeClass: changeClass,
+                    mcap: formattedMcap,
+                    volM5: formattedVolM5,
+                    volH1: formattedVolH1,
+                    volH6: formattedVolH6,
+                    volH24: formattedVolH24,
+                    symbol: formattedSymbol
+                };
+
+                // If first fetch, update ticker immediately
+                if (isFirstFetch) {
+                    updateTickerBar();
+                    isFirstFetch = false;
+                }
+
+                // Update Stats Bar (Every 5s)
+                updateElement('sync-stat-price', formattedPrice);
+                updateElement('sync-stat-change', formattedChange, changeClass);
+                updateElement('sync-stat-mcap', formattedMcap);
+                updateElement('sync-stat-vol-h24', formattedVolH24);
+
+                // Update Chart Header (Every 5s)
+                updateElement('sync-chart-price', formattedPrice);
+                updateElement('sync-chart-change', formattedChange, changeClass);
+
+                // Update other Symbols (Every 5s)
+                document.querySelectorAll('.dynamic-symbol').forEach(el => {
+                    if (!el.closest('.ticker-move')) {
+                        el.innerText = formattedSymbol;
+                    }
+                });
+
+                // Update Browser Title
+                document.title = formattedSymbol + " - Stop Wasting Everything";
+            }
+        } catch (error) {
+            console.error("Error fetching DexScreener data:", error);
+        }
     }
 
-    .hero-section {
-        gap: 20px;
-    }
-}
+    function updateTickerBar() {
+        if (!latestTickerData) return;
+        updateElement('sync-ticker-price', latestTickerData.price);
+        updateElement('sync-ticker-change', latestTickerData.change, latestTickerData.changeClass);
+        updateElement('sync-ticker-mcap', latestTickerData.mcap);
+        updateElement('sync-ticker-vol-m5', latestTickerData.volM5);
+        updateElement('sync-ticker-vol-h1', latestTickerData.volH1);
+        updateElement('sync-ticker-vol-h6', latestTickerData.volH6);
+        updateElement('sync-ticker-vol-h24', latestTickerData.volH24);
 
-@media (max-width: 768px) {
-    .hero-section {
-        flex-direction: column;
-        text-align: center;
-        padding: 30px 0;
-    }
-
-    .hero-placeholder-box {
-        min-height: 300px;
-    }
-
-    .floating-mascot {
-        font-size: clamp(6rem, 20vw, 10rem);
+        const tickerSymbolEl = document.querySelector('.ticker-move .dynamic-symbol');
+        if (tickerSymbolEl) {
+            tickerSymbolEl.innerText = latestTickerData.symbol;
+        }
     }
 
-    .floating-badge {
-        top: -10px;
-        left: 50%;
-        right: auto;
-        padding: 10px;
-        font-size: 0.8rem;
-        transform: translateX(-50%) rotate(-5deg);
+    function updateElement(id, text, changeClass = null) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerText = text;
+            if (changeClass) {
+                el.className = ''; // reset classes
+                el.classList.add(changeClass);
+            }
+        }
     }
 
-    .hero-left h1 {
-        font-size: 2.5rem;
+    // Attach listener for when the ticker animation completes a cycle
+    const tickerMoveEl = document.querySelector('.ticker-move');
+    if (tickerMoveEl) {
+        tickerMoveEl.addEventListener('animationiteration', () => {
+            updateTickerBar();
+        });
     }
 
-    .ca-container {
-        justify-content: center;
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-        width: 100%;
-        box-sizing: border-box;
+    // Initial fetch
+    fetchDexData();
+    // Fetch every 5 seconds
+    setInterval(fetchDexData, 5000);
+
+    // Fetch Top Holders from Rugcheck API
+    async function fetchRugCheckHolders() {
+        if (isSoon) return;
+        const holdersList = document.getElementById('holders-list');
+        if (!holdersList) return;
+
+        try {
+            const response = await fetch(`https://api.rugcheck.xyz/v1/tokens/${TOKEN_CA}/report`);
+            if (!response.ok) throw new Error("Rugcheck API error");
+            const data = await response.json();
+
+            if (data) {
+                // Update Total Holders in Top Stats Bar
+                if (data.totalHolders) {
+                    const topHoldersStat = document.getElementById('sync-stat-holders');
+                    if (topHoldersStat) {
+                        topHoldersStat.innerText = data.totalHolders.toLocaleString('en-US');
+                    }
+                }
+
+                // Calculate and Update Total Supply
+                if (data.topHolders && data.topHolders.length > 0) {
+                    const firstHolder = data.topHolders[0];
+                    if (firstHolder.pct > 0) {
+                        // For memecoins (like Pump.fun) this correctly infers the original supply (e.g. 1B)
+                        const calculatedSupply = Math.round(firstHolder.uiAmount / (firstHolder.pct / 100));
+                        const formattedSupply = calculatedSupply.toLocaleString('en-US');
+
+                        const supplyStat = document.getElementById('sync-stat-supply');
+                        if (supplyStat) supplyStat.innerText = formattedSupply;
+
+                        const supplyDonut = document.getElementById('sync-donut-supply');
+                        if (supplyDonut) supplyDonut.innerText = formattedSupply;
+                    }
+                }
+
+                // Update Top Holders Card (if exists)
+                if (data.topHolders && holdersList) {
+                    let html = '';
+                    // Get top 8 accounts
+                    for (let i = 0; i < Math.min(8, data.topHolders.length); i++) {
+                        const holder = data.topHolders[i];
+                        const percent = holder.pct.toFixed(2);
+                        let address = holder.address.substring(0, 4) + '...' + holder.address.substring(holder.address.length - 4);
+                        let addrColor = "var(--text-main)";
+
+                        if (i === 0 && percent > 5) {
+                            address = "Raydium Pool / Maker";
+                            addrColor = "var(--neon-cyan)";
+                        } else if (holder.insider) {
+                            address += " (Insider)";
+                            addrColor = "#ff3366";
+                        }
+
+                        const amountStr = parseFloat(holder.uiAmountString).toLocaleString('en-US', { maximumFractionDigits: 0 });
+                        const ticker = (data.fileMeta && data.fileMeta.symbol) ? data.fileMeta.symbol : "TOKEN";
+
+                        html += `
+                        <div class="holder-item">
+                            <div class="holder-rank">${i + 1}</div>
+                            <div class="holder-info">
+                                <span class="holder-address" style="color: ${addrColor};">${address}</span>
+                                <span class="holder-amount">${amountStr} ${ticker}</span>
+                            </div>
+                            <div class="holder-percent">${percent}%</div>
+                        </div>
+                    `;
+                    }
+
+                    holdersList.innerHTML = html;
+                }
+            }
+        } catch (e) {
+            console.error("Rugcheck fetch failed:", e);
+            holdersList.innerHTML = '<div style="text-align: center; color: #ff3366; padding: 20px;">Failed to load holders from Rugcheck. API rate limited.</div>';
+        }
     }
 
-    .ca-info {
-        align-items: center;
+    // Initial fetch for holders
+    fetchRugCheckHolders();
+
+    // Load Memes from JSON
+    async function loadMemes() {
+        const memeContainer = document.getElementById('meme-grid-container');
+        if (!memeContainer) return;
+
+        try {
+            // Append a random timestamp to prevent browser caching old memes.json
+            const response = await fetch('memes.json?t=' + new Date().getTime());
+            if (!response.ok) throw new Error("Could not load memes.json");
+            const memes = await response.json();
+
+            memeContainer.innerHTML = '';
+            // Store all meme elements to easily paginate them
+            const memeElements = [];
+
+            memes.forEach(meme => {
+                const memeDiv = document.createElement('div');
+                memeDiv.classList.add('meme-thumbnail');
+                // Render as a pure image instead of background/video
+                memeDiv.innerHTML = `
+                    <img src="${meme.thumbnail || meme.url}" alt="${meme.title || 'Meme'}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
+                `;
+
+                // Open image in modal if clicked
+                memeDiv.addEventListener('click', () => {
+                    openVideoModal(meme.thumbnail || meme.url);
+                });
+
+                memeContainer.appendChild(memeDiv);
+                memeElements.push(memeDiv);
+            });
+
+            // --- NEW: Lock Grid Height with Blank Placeholders ---
+            // Pad the array with invisible divs until it's a multiple of 12
+            // This ensures the grid always stays 2 rows tall even on the last page!
+            while (memeElements.length % 12 !== 0) {
+                const blankDiv = document.createElement('div');
+                blankDiv.classList.add('meme-thumbnail');
+                blankDiv.style.visibility = 'hidden'; // Takes up space but is invisible
+                memeContainer.appendChild(blankDiv);
+                memeElements.push(blankDiv);
+            }
+            // -----------------------------------------------------
+
+            // --- Pagination Logic ---
+            let currentPage = 0;
+            const itemsPerPage = 12; // Exactly 2 rows (6 columns * 2)
+            const prevBtn = document.getElementById('prev-memes-btn');
+            const nextBtn = document.getElementById('next-memes-btn');
+
+            function renderMemePage() {
+                const start = currentPage * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                memeElements.forEach((el, index) => {
+                    if (index >= start && index < end) {
+                        el.style.display = 'block';
+                    } else {
+                        el.style.display = 'none'; // Completely hides the element from the grid
+                    }
+                });
+
+                // Update button states
+                if (prevBtn && nextBtn) {
+                    if (currentPage === 0) {
+                        prevBtn.style.opacity = '0.5';
+                        prevBtn.style.pointerEvents = 'none';
+                    } else {
+                        prevBtn.style.opacity = '1';
+                        prevBtn.style.pointerEvents = 'auto';
+                    }
+
+                    if (end >= memeElements.length) {
+                        nextBtn.style.opacity = '0.5';
+                        nextBtn.style.pointerEvents = 'none';
+                    } else {
+                        nextBtn.style.opacity = '1';
+                        nextBtn.style.pointerEvents = 'auto';
+                    }
+                }
+            }
+
+            if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', () => {
+                    if (currentPage > 0) {
+                        currentPage--;
+                        renderMemePage();
+                    }
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    if ((currentPage + 1) * itemsPerPage < memeElements.length) {
+                        currentPage++;
+                        renderMemePage();
+                    }
+                });
+            }
+
+            // Function to strictly align Holders List with Meme Grid
+            function syncHoldersHeight() {
+                const holdersList = document.getElementById('holders-list');
+                if (memeContainer && holdersList) {
+                    // Reset height first to get accurate natural top position
+                    holdersList.style.maxHeight = 'none';
+
+                    const memeGridRect = memeContainer.getBoundingClientRect();
+                    const holdersListRect = holdersList.getBoundingClientRect();
+
+                    // Calculate current JS scale factor applied to the body (if desktop)
+                    const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
+                    const scale = isMobile ? 1 : (window.innerWidth / 1920);
+
+                    // Pixel-perfect calculation: Bottom of meme grid - Top of holders list, divided by scale
+                    const targetHeight = (memeGridRect.bottom - holdersListRect.top) / scale;
+
+                    holdersList.style.maxHeight = Math.max(100, targetHeight) + 'px';
+                }
+            }
+
+            // Initial render
+            renderMemePage();
+
+            // Sync heights slightly after render to ensure images are calculated
+            setTimeout(syncHoldersHeight, 100);
+            window.addEventListener('resize', syncHoldersHeight);
+
+            // ------------------------
+        } catch (error) {
+            console.error("Error loading memes:", error);
+            memeContainer.innerHTML = '<div style="color: #aaa; grid-column: 1 / -1; text-align: center;">Could not load memes...</div>';
+        }
     }
 
-    .hero-buttons {
-        justify-content: center;
-        flex-wrap: wrap;
+    // Video Modal Logic
+    const videoModal = document.getElementById('video-modal');
+    const videoModalBody = document.getElementById('video-modal-body');
+    const videoModalClose = document.querySelector('.video-modal-close');
+
+    function openVideoModal(url) {
+        if (!videoModal) return;
+        videoModalBody.innerHTML = `
+                        <img src="${url}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
+                    `; videoModal.style.display = 'flex';
     }
 
-    .btn {
-        padding: 12px 24px;
-        font-size: clamp(0.8rem, 2.5vw, 1rem);
-        width: 100%;
-        max-width: 250px;
+    function closeVideoModal() {
+        if (!videoModal) return;
+        videoModal.style.display = 'none';
+        videoModalBody.innerHTML = ''; // This stops the video completely
     }
 
-    .stats-bar {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-        padding: 15px;
+    if (videoModalClose) {
+        videoModalClose.addEventListener('click', closeVideoModal);
     }
 
-    .stat-box {
-        flex: 1 1 40%;
-        justify-content: center;
-        text-align: center;
-        flex-direction: column;
-        gap: 5px;
+    if (videoModal) {
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) {
+                closeVideoModal();
+            }
+        });
     }
 
-    .stat-icon {
-        font-size: 1.5rem;
-    }
+    loadMemes();
 
-    .navbar {
-        padding: 15px 5%;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-    }
+});
 
-    .nav-links {
-        display: none;
-    }
-
-    .ticker-bar {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        padding: 10px 5%;
-    }
-
-    .ticker-wrap {
-        margin-right: 0;
-        width: 100%;
-        flex: none;
-    }
-
-    .footer-bottom {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-    }
-}
-
-/* Video Modal */
-.video-modal {
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
-}
-
-.video-modal-content {
-    position: relative;
-    width: 90%;
-    max-width: 450px; /* Sized to match exactly 2x2 meme thumbnails */
-    background: #000;
-    border-radius: 10px;
-    box-shadow: 0 0 20px var(--neon-cyan);
-    padding: 10px;
-}
-
-.video-modal-close {
-    position: absolute;
-    top: -40px;
-    right: 0;
-    color: #fff;
-    font-size: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.video-modal-close:hover {
-    color: var(--neon-cyan);
-}
-
-#video-modal-body iframe, #video-modal-body img {
-    width: 100%;
-    aspect-ratio: 1 / 1; /* Force square aspect ratio like the 2x2 grid */
-    border-radius: 8px;
-    border: none;
-    display: block;
-    object-fit: contain;
-}
-
-/* Meme Grid & Thumbnails */
-.meme-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 15px;
-}
-
-@media (max-width: 768px) {
-    .meme-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
-    .meme-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-.meme-thumbnail {
-    cursor: pointer;
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    background: transparent;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    /* Optimasi: Hanya animasikan yang berubah & gunakan Hardware Acceleration (GPU) */
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease;
-    transform: translateZ(0); /* Paksa render di GPU agar tidak lag */
-    will-change: transform;
-    overflow: hidden;
-}
-
-.meme-thumbnail:hover {
-    border-color: var(--neon-cyan);
-    transform: scale(1.03) translateZ(0);
-    z-index: 5;
-}
-
-.meme-play-btn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    border: 2px solid #fff;
-    transition: all 0.3s;
-    z-index: 2;
-}
-
-.meme-thumbnail:hover .meme-play-btn {
-    background: var(--neon-cyan);
-    color: #000;
-    border-color: var(--neon-cyan);
-    transform: translate(-50%, -50%) scale(1.1);
-}
-
-/* --- ADVANCED HOLOGRAPHIC HERO RIGHT --- */
-.hero-right {
-    position: relative;
-    width: 700px;
-    height: 600px; /* Taller to accommodate symmetric cards */
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 1000px;
-}
-
-/* Connection Lines */
-.connection-lines {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* HUD Holographic Rings Behind */
-.hud-ring-container {
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.15;
-}
-
-.hud-ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid var(--neon-cyan);
-}
-
-.outer-ring {
-    width: 100%;
-    height: 100%;
-    border-width: 2px;
-    border-style: dashed;
-    animation: spinSlow 30s linear infinite;
-}
-
-.inner-ring {
-    width: 75%;
-    height: 75%;
-    border-width: 4px;
-    border-style: dotted;
-    animation: spinSlowReverse 20s linear infinite;
-}
-
-/* 3D Glowing Podium */
-.platform-container {
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%) rotateX(75deg);
-    width: 450px;
-    height: 450px;
-    transform-style: preserve-3d;
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.podium-base {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: #020813;
-    border: 4px solid var(--neon-cyan);
-    box-shadow: 0 15px 0 #005a70, 0 20px 40px rgba(0, 255, 255, 0.5);
-    transform: translateZ(-20px);
-}
-
-.podium-top {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 255, 255, 0.4) 0%, rgba(2, 8, 19, 0.9) 70%);
-    border: 4px solid var(--neon-cyan);
-    box-shadow: 0 0 50px var(--neon-cyan), inset 0 0 30px var(--neon-cyan);
-}
-
-.platform-glow-base {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 60%);
-    filter: blur(40px);
-    opacity: 0.7;
-    transform: translateZ(20px);
-    animation: pulseGlow 4s infinite alternate;
-}
-
-/* Center Assets (Frog & Broom) */
-.center-assets {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    width: 200px;
-    height: 200px;
-    animation: float 4s ease-in-out infinite;
-}
-
-/* Fallback Emojis */
-.center-assets .frog, .center-assets .broom {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.center-assets .frog {
-    font-size: 180px;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    text-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
-}
-.center-assets .broom {
-    font-size: 150px;
-    left: -50px; top: 10px;
-    transform: rotate(-25deg);
-    text-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
-    z-index: 11;
-}
-
-/* Actual Images (When uncommented in HTML) */
-.frog-img {
-    position: absolute;
-    width: 220px;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    filter: drop-shadow(0 0 40px rgba(0, 255, 255, 0.5));
-}
-.broom-img {
-    position: absolute;
-    width: 170px;
-    left: -40px; top: 10px;
-    transform: rotate(-20deg);
-    z-index: 11;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.4));
-}
-
-/* HUD Cards - Horizontal Layout like Mockup */
-.hud-card {
-    position: absolute;
-    width: 200px;
-    padding: 12px 15px;
-    background: rgba(0, 15, 25, 0.7);
-    border: 1px solid var(--neon-cyan);
-    color: #fff;
-    backdrop-filter: blur(15px);
-    border-radius: 8px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 600;
-    line-height: 1.4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.1);
-    z-index: 5;
-    transition: all 0.3s ease;
-}
-
-.hud-icon {
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    filter: drop-shadow(0 0 5px var(--neon-cyan));
-}
-
-.hud-text {
-    text-align: left;
-    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-    letter-spacing: 0.5px;
-}
-
-/* Symmetrical Coordinates */
-.hud-top-left {
-    top: 80px;
-    left: 20px;
-}
-
-.hud-top-right {
-    top: 80px;
-    right: 20px;
-}
-
-.hud-bottom-left {
-    bottom: 80px;
-    left: 20px;
-}
-
-.hud-bottom-right {
-    bottom: 80px;
-    right: 20px;
-}
-
-/* Advanced Animations */
-@keyframes spinSlow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes spinSlowReverse {
-    from { transform: rotate(360deg); }
-    to { transform: rotate(0deg); }
-}
-
-@keyframes pulseGlow {
-    0% { box-shadow: 0 0 10px var(--neon-cyan), inset 0 0 10px var(--neon-cyan); opacity: 0.6; }
-    100% { box-shadow: 0 0 30px var(--neon-cyan), inset 0 0 30px var(--neon-cyan); opacity: 1; }
-}
-
-/* Responsiveness for new hero right */
-@media (max-width: 1200px) {
-    .hero-right { transform: scale(0.85); transform-origin: center; }
-}
-@media (max-width: 900px) {
-    .hero-right { transform: scale(0.65); margin-top: -30px; }
-}
-@media (max-width: 600px) {
-    .hero-right { transform: scale(0.45); margin-top: -80px; margin-bottom: -100px; }
+// Particles.js Init (From Clanker)
+if (window.particlesJS) {
+    particlesJS('particles-js', {
+        'particles': {
+            'number': { 'value': 80, 'density': { 'enable': true, 'value_area': 800 } },
+            'color': { 'value': '#00dfff' }, /* Changed from Clanker purple to Sweep Cyan */
+            'shape': { 'type': 'circle' },
+            'opacity': { 'value': 0.5, 'random': true },
+            'size': { 'value': 3, 'random': true },
+            'line_linked': { 'enable': true, 'distance': 150, 'color': '#00dfff', 'opacity': 0.2, 'width': 1 },
+            'move': { 'enable': true, 'speed': 2, 'direction': 'none', 'random': true, 'straight': false, 'out_mode': 'out', 'bounce': false }
+        },
+        'interactivity': {
+            'detect_on': 'canvas',
+            'events': {
+                'onhover': { 'enable': true, 'mode': 'grab' },
+                'onclick': { 'enable': true, 'mode': 'push' },
+                'resize': true
+            },
+            'modes': {
+                'grab': { 'distance': 140, 'line_linked': { 'opacity': 1 } },
+                'push': { 'particles_nb': 4 }
+            }
+        },
+        'retina_detect': true
+    });
 }
