@@ -12,12 +12,29 @@
         href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=12">
+    <link rel="stylesheet" href="style.css?v=51">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 </head>
 
-<body>
-    <!-- Background Effects (From WEB1) -->
-    <div class="cyber-grid"></div>
+    <!-- Night Sky Universe -->
+    <div class="star-universe">
+        <div class="star-layer layer-1"></div>
+        <div class="star-layer layer-2"></div>
+        
+        <!-- Shiny Stars (Segi banyak) -->
+        <div class="shiny-star" style="top: 15%; left: 20%; animation-delay: 0s;"></div>
+        <div class="shiny-star" style="top: 40%; left: 85%; animation-delay: 1.5s;"></div>
+        <div class="shiny-star" style="top: 75%; left: 10%; animation-delay: 3s;"></div>
+        <div class="shiny-star" style="top: 25%; left: 60%; animation-delay: 0.8s;"></div>
+        <div class="shiny-star" style="top: 80%; left: 70%; animation-delay: 2.2s;"></div>
+
+        <!-- Meteors -->
+        <div class="meteor m-1"></div>
+        <div class="meteor m-2"></div>
+    </div>
+
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
 
@@ -85,12 +102,67 @@
                     <button id="copy-btn" class="copy-btn">📋</button>
                 </div>
             </div>
-            <div class="hero-visual">
-                <div class="hero-placeholder-box">
-                    <div class="floating-mascot">🧹🐸</div>
+            <!-- HUD Holographic Right Section -->
+            <section class="hero-right">
+
+                <!-- HUD Holographic Ring Behind -->
+                <div class="hud-ring-container">
+                    <div class="hud-ring outer-ring"></div>
+                    <div class="hud-ring inner-ring"></div>
                 </div>
-                <div class="floating-badge">CLEAN BLOCKCHAIN<br>BETTER FUTURE</div>
-            </div>
+
+                <!-- SVG Connection Lines -->
+                <svg class="connection-lines" viewBox="0 0 700 600">
+                    <!-- Top Left Line -->
+                    <line x1="350" y1="300" x2="200" y2="120" stroke="var(--neon-cyan)" stroke-width="1.5"
+                        stroke-dasharray="4 4" opacity="0.5" />
+                    <!-- Top Right Line -->
+                    <line x1="350" y1="300" x2="500" y2="120" stroke="var(--neon-cyan)" stroke-width="1.5"
+                        stroke-dasharray="4 4" opacity="0.5" />
+                    <!-- Bottom Left Line -->
+                    <line x1="350" y1="300" x2="200" y2="480" stroke="var(--neon-cyan)" stroke-width="1.5"
+                        stroke-dasharray="4 4" opacity="0.5" />
+                    <!-- Bottom Right Line -->
+                    <line x1="350" y1="300" x2="500" y2="480" stroke="var(--neon-cyan)" stroke-width="1.5"
+                        stroke-dasharray="4 4" opacity="0.5" />
+                </svg>
+
+                <!-- 3D Glowing Podium -->
+                <div class="platform-container">
+                    <div class="podium-base"></div>
+                    <div class="podium-top"></div>
+                    <div class="platform-glow-base"></div>
+                </div>
+
+                <!-- Center Assets -->
+                <!-- Use actual images if available, otherwise fallback to Emojis for now -->
+                <div class="center-assets">
+                    <div class="broom">🧹</div>
+                    <div class="frog">🐸</div>
+                    <!-- Once images are added to folder, user can uncomment below: -->
+                    <!-- <img src="broom.png" class="broom-img"> -->
+                    <!-- <img src="frog-logo.png" class="frog-img"> -->
+                </div>
+
+                <!-- 4 Symmetrical HUD Cards -->
+                <div class="hud-card hud-top-left">
+                    <div class="hud-icon">🧹</div>
+                    <div class="hud-text">CLEANING<br>THE CHAIN</div>
+                </div>
+                <div class="hud-card hud-top-right">
+                    <div class="hud-icon">🚀</div>
+                    <div class="hud-text">BETTER<br>FUTURE</div>
+                </div>
+                <div class="hud-card hud-bottom-left">
+                    <div class="hud-icon">🗑️</div>
+                    <div class="hud-text">NO MORE<br>TRASH</div>
+                </div>
+                <div class="hud-card hud-bottom-right">
+                    <div class="hud-icon">👥</div>
+                    <div class="hud-text">BUILT FOR<br>THE CULT</div>
+                </div>
+
+            </section>
         </section>
 
         <!-- Stats Bar -->
@@ -166,39 +238,24 @@
                                     class="dot dot-tm"></span> Contract</span> <span class="percent">RENOUNCED</span>
                         </li>
                     </ul>
-
-                    <div
-                        style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 6px; border: 1px solid rgba(57, 255, 20, 0.2);">
-                        <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 5px;">TRACK DEV WALLET:
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span
-                                style="font-family: monospace; font-size: 0.75rem; color: var(--text-main);">WALLET_DEV</span>
-                            <a href="https://solscan.io/account/WALLET_DEV" target="_blank"
-                                style="color: var(--neon-cyan); text-decoration: none; font-size: 0.7rem; display: flex; align-items: center; gap: 5px;">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Solscan
-                            </a>
-                        </div>
-                    </div>
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-outline btn-full">VIEW DETAILS</button>
+                    <button class="btn btn-outline btn-full" onclick="window.open('https://solscan.io/', '_blank')">VIEW
+                        DETAILS</button>
                 </div>
             </div>
 
             <!-- Live Chart Card -->
             <div class="card">
                 <div class="card-header">
-                    <h2>LIVE CHART</h2>
+                    <h2 style="display: flex; align-items: center; justify-content: center; gap: 10px;">LIVE CHART <span style="opacity: 0.5;">|</span> 🦅 DEXSCREENER</h2>
                 </div>
                 <div class="card-body">
 
                     <div class="chart-placeholder"
                         style="padding:0; overflow:hidden; position: relative; height: 400px;">
                         <iframe src=""
-                            style="position: absolute; top: 0; left: 0; width:100%; height:100%; border:none;"></iframe>
-                        <!-- Watermark Cover -->
-                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 35px; background: #0b1120; z-index: 10;"></div>
+                            style="position: absolute; top: 0; left: 0; width:100%; height: calc(100% + 65px); border:none;"></iframe>
                     </div>
                 </div>
             </div>
@@ -258,14 +315,14 @@
                     <h2>ROADMAP</h2>
                 </div>
                 <div class="card-body roadmap-body">
-                    <div class="roadmap-item current">
-                        <div class="rd-icon"></div>
+                    <div class="roadmap-item active">
+                        <div class="rd-icon"><i class="fa-solid fa-check"></i></div>
                         <div class="rd-content">
                             <span class="rd-phase">PHASE 1</span>
                             <span class="rd-desc">Website Development & Community Building</span>
                         </div>
                     </div>
-                    <div class="roadmap-item">
+                    <div class="roadmap-item current">
                         <div class="rd-icon"></div>
                         <div class="rd-content">
                             <span class="rd-phase">PHASE 2</span>
@@ -302,8 +359,10 @@
                         <!-- Memes will be loaded dynamically from memes.json -->
                     </div>
                 </div>
-                <div class="card-footer">
-                    <button class="btn btn-outline btn-full">VIEW MORE MEMES</button>
+                <div class="card-footer" style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline btn-full" id="prev-memes-btn"
+                        style="opacity: 0.5; pointer-events: none;">PREVIOUS</button>
+                    <button class="btn btn-outline btn-full" id="next-memes-btn">NEXT</button>
                 </div>
             </div>
 
@@ -313,8 +372,7 @@
                     <h2>TOP HOLDERS</h2>
                 </div>
                 <div class="card-body no-pad">
-                    <div class="holders-list" id="holders-list"
-                        style="max-height: 250px; overflow-y: auto; padding: 15px;">
+                    <div class="holders-list" id="holders-list" style="overflow-y: auto; padding: 15px 5px;">
                         <div style="text-align: center; color: #aaa; padding: 20px;">Fetching live top holders from
                             RugCheck...</div>
                     </div>
@@ -373,7 +431,7 @@
         </div>
     </div>
 
-    <script src="script.js?v=12"></script>
+    <script src="script.js?v=51"></script>
 </body>
 
 </html>
