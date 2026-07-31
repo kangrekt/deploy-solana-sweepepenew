@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         document.title = "$SWEEP - Stop Wasting Everything";
     } else if (chartIframe) {
-        chartIframe.src = `https://dexscreener.com/solana/${TOKEN_CA}?embed=1&theme=dark`;
+        chartIframe.src = `https://dexscreener.com/solana/${TOKEN_CA}?embed=1&theme=dark&trades=0&info=0`;
     }
 
     // Update Solscan Holders link dynamically
