@@ -645,7 +645,7 @@ svg {
 
 @media (max-width: 768px) {
     .chart-placeholder {
-        height: 600px; /* DexScreener mobile UI is taller */
+        height: 400px; /* Adjusted to fit mobile screens better */
     }
 }
 
